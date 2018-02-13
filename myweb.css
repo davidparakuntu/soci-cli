@@ -1,0 +1,160 @@
+.login-container{
+    display:flex;
+    flex-direction:column;
+    align-content: center;
+    width:100%;
+    height:100%;
+
+}
+.login-div{
+  display: flex;
+  flex-direction:row;
+  height: 47%;
+  width: 100%;
+  /* cursor: pointer; */
+}
+.login-logo{
+ width: 23%;
+ height: 69%;
+ }
+.login-fields{
+  padding-top: 3%;
+  display: flex;
+  width: 72%;
+  flex-direction:column;
+  position: relative;
+}
+.field{
+  width: 100%;
+  margin-bottom: 43px;
+  position:relative;
+  cursor:pointer;
+}
+
+.login-button{
+
+}
+.register-div{
+  display: flex;
+  flex-direction:row;
+  height: 64%;
+  width: 100%;
+  top: 10%;
+}
+.register-logo{width: 29%;height: 76%;}
+.register-fields{
+  display: flex;
+  flex-direction:column;
+  width: 71%;
+  position: relative;
+  padding-top: 0%;
+}
+.login-seperator{
+  height: -4%;
+}
+
+.login-image{
+  width: 85%;
+  height:100%;
+}
+.register-image{
+  width: 81%;
+  height: 82%;
+}
+.register-field{
+  width: 100%;
+}
+.register-action-panel{
+  padding: 0%;
+  display:flex;
+  flex-direction: row;
+}
+.login-action-panel{
+  padding: 0%;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  }
+.button{
+  width: 101px;
+  height: 27px;
+  text-align: center;
+  left: 34px;
+  background-color: rgb(136,92,32);
+  cursor: pointer;
+  margin: 5px;
+  padding-top: 5px;
+  border-bottom: 2px solid lightgrey;
+  border-left: 2px solid lightgrey;
+}
+.login-button.button{
+  background-color: rgb(113,82,70);
+}
+
+.cancel-button.button{
+  background-color: rgb(113,82,70);
+}
+.text-input{
+  padding: 10px 10px 10px 1px;
+  border: none;
+  font-size: 18px;
+  border-bottom: 1px solid black;
+  width: 90%;
+  cursor: pointer;
+}
+.text-input:focus{
+  border:none;
+  outline: none;
+
+}
+.label{
+  font-size:18px;
+  position:absolute;
+  left:5px;
+  top:10px;
+  transition:0.2s ease all; 
+  font-weight:normal;
+  color:#999;
+  pointer-events:none;
+}
+
+.text-input:focus ~ .label,input:valid ~ .label{
+  top:-20px;
+  font-size:14px;
+  color:#5264AE;
+ 
+  
+}
+
+.bar {
+  position:relative;
+  display:block;
+  width: 0%;
+  left:50%;
+  right:50%;
+  height: 2px;
+}
+
+
+.text-input:focus ~ .bar,input:valid ~ .bar, .text-input:hover ~ .bar {
+  width:90%;
+  height:2px;
+  left:0%;
+  right:0%;
+  background-color:#5264AE;
+  transition:0.2s ease all; 
+}
+#app-content{
+    width: calc(100vw);
+    height: calc(100vh);
+}
+@media screen and (min-width:900px){
+  #app-content{
+     width: calc(70vw);
+     height: calc(100vh);
+     margin:2% 20% 2% 20%;
+     
+  }
+}
+
+
