@@ -9,7 +9,7 @@
 .login-div{
   display: flex;
   flex-direction:row;
-  height: 47%;
+  height: 38%;
   width: 100%;
   /* cursor: pointer; */
 }
@@ -74,10 +74,11 @@
   position: relative;
   display: flex;
   flex-direction: row;
+  /* justify-content: start; */
   }
 .button{
-  width: 101px;
-  height: 27px;
+  width: 40%;
+  height: 10%;
   text-align: center;
   left: 34px;
   background-color: rgb(136,92,32);
@@ -86,6 +87,7 @@
   padding-top: 5px;
   border-bottom: 2px solid lightgrey;
   border-left: 2px solid lightgrey;
+  position: relative;
 }
 .login-button.button{
   background-color: rgb(113,82,70);
@@ -153,8 +155,37 @@
      width: calc(70vw);
      height: calc(100vh);
      margin:2% 20% 2% 20%;
-     
+
   }
 }
+.button:focus{
+  outline:none;
+}
+.effect{
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  background-color:blue;
+}
 
+.button:hover ~ .effect{
+  outline:none;
+  left: 0%;
+  right: 0%;
+  transition:0.5s ease all;
+}
+
+.button{
+  width: 100px;;
+  height: 25px;
+  text-align: center;
+  left: 34px;
+  background-color: rgb(136,92,32);
+  cursor: pointer;
+  margin: 5px;
+  padding-top: 5px;
+  border-bottom: 2px solid lightgrey;
+  border-left: 2px solid lightgrey;
+  position: relative;
+}
 
