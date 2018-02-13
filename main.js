@@ -6,6 +6,10 @@ window.addEventListener('load',function(event){
     res.text().then(function(text){
       let template = hb.compile(text);
       document.getElementById('app-content').innerHTML=template();
+    }).then(function(){
+      document.getElementsByClassName('register-button')[0].addEventListener('click',function(){
+        alert('clicked');
+      })
     });
   });
 },false);

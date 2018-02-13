@@ -158,22 +158,11 @@
 
   }
 }
-.button:focus{
-  outline:none;
-}
-.effect{
-  position: absolute;
-  left: 50%;
-  right: 50%;
-  background-color:blue;
+.button:active ~ .button{
+  background-color:black%;
+  transition:.7s ease all;
 }
 
-.button:hover ~ .effect{
-  outline:none;
-  left: 0%;
-  right: 0%;
-  transition:0.5s ease all;
-}
 
 .button{
   width: 100px;;
@@ -188,4 +177,5 @@
   border-left: 2px solid lightgrey;
   position: relative;
 }
+
 
