@@ -8,6 +8,8 @@ window.en = function(name) {
 window.ei = function(id) {
     return document.getElementById(id);
 }
+
+window.app = require('./app.js');
 window.addEventListener('load', function(event) {
     console.log(event);
     fetch('templates/login.hbs').then(function(res) {
@@ -34,12 +36,9 @@ window.addEventListener('load', function(event) {
                         'Content-Type': 'application/json'
                     })
                 }).then(function() {
-                    fetch('templates/home.hbs').then(function(res) {
-                        res.text().then(function(text) {
-                            let template = hb.compile(text);
-                            ei('app-content').innerHTML = template();
-                        });
-                    });
+                    console.log('Posted the user');
+                    window.myapp = app.init(user);
+                    myapp.render('templates/home.hbs',{},ei('app-content'))
                 }).catch(function() {
                     console.log('Issues');
                 });
