@@ -8,6 +8,8 @@ window.addEventListener('load',function(event){
     }).then(function(){
       document.getElementsByClassName('register-button')[0].addEventListener('click',function(){
         alert('clicked');
+        let obj = {"contact":{"mobileNumber":[1213213,343434],"emailIDs":["xx@yy.com"]},"name":{"firstName":"Dvd","lastName":"Mat","fullName":"Dvd Mat","displayName":"Hello Sir"}};
+        fetch('http://localhost:7080/user',{method:"POST",body:JSON.stringify(obj),headers:new Headers({'Content-Type': 'application/json'})}).then(function(){console.log('Done');}).catch(function(){console.log('Issues');});
       })
     });
   });
