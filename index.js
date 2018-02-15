@@ -12,12 +12,12 @@ window.ei = function(id) {
 window.app = require('./app.js');
 window.addEventListener('load', function(event) {
     console.log(event);
-    fetch('templates/login.hbs').then(function(res) {
+    fetch('templates/login.html').then(function(res) {
         res.text().then(function(text) {
             let template = hb.compile(text);
             document.getElementById('app-content').innerHTML = template();
         }).then(function() {
-            document.getElementsByClassName('register-button')[0].addEventListener('click', function() {
+            ec('register-button')[0].addEventListener('click', function() {
                 //let obj = {"contact":{"mobileNumber":[1213213,343434],"emailIDs":["xx@yy.com"]},"name":{"firstName":"Dvd","lastName":"Mat","fullName":"Dvd Mat","displayName":"Hello Sir"}};
                 let user = {};
                 user.id = en('email-id')[0].value;
@@ -38,11 +38,24 @@ window.addEventListener('load', function(event) {
                 }).then(function() {
                     console.log('Posted the user');
                     window.myapp = app.init(user);
-                    myapp.render('templates/home.hbs',{},ei('app-content'))
+                    myapp.render('templates/home.html', {}, ei('app-content'))
                 }).catch(function() {
                     console.log('Issues');
                 });
-            })
+            });
+
+            ec('login-button')[0].addEventListener('click', function() {
+                //let obj = {"contact":{"mobileNumber":[1213213,343434],"emailIDs":["xx@yy.com"]},"name":{"firstName":"Dvd","lastName":"Mat","fullName":"Dvd Mat","displayName":"Hello Sir"}};
+                let id = en('login-user-name')[0].value;
+                fetch('http://localhost:7080/user/' + id).then(function(response) {
+                    response.json().then(function(json) {
+                        window.myapp = app.init(json);
+                        myapp.render('templates/home.html', {}, ei('app-content'));
+                    });
+                }).catch(function(){
+                    console.log("Fetching user failed");
+                });
+            });
         });
     });
 }, false);

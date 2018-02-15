@@ -88,6 +88,7 @@
   border-bottom: 2px solid lightgrey;
   border-left: 2px solid lightgrey;
   position: relative;
+  color:white;
 }
 .login-button.button{
   background-color: rgb(113,82,70);
@@ -178,4 +179,42 @@
   position: relative;
 }
 
+.home-container{
+  display:flex;
+  flex-direction:row;
+  width:calc(100vw);
+  height:calc(100vh);
+}
+.content{
+  display:flex;
+  flex-direction:column;
+  width:80%;
+  height:100%;
+
+}
+.conetnt-area{
+  display:flex;
+  flex-direction:row;
+}
+
+.play-area{
+  background-color:blue;
+  width:70%;
+  height:100%;
+}
+.tool-area{
+  background-color:red;
+  width:30%;
+  height:100%;
+}
+.navigation-bar{
+  background-color:green;
+  width:20%;
+  height:100%;
+}
+.menu-bar{
+  background-color:grey;
+  width:100%;
+  height:20%;
+}
 
