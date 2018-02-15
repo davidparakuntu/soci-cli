@@ -50,7 +50,7 @@ window.addEventListener('load', function(event) {
                 fetch('http://localhost:7080/user/' + id).then(function(response) {
                     response.json().then(function(json) {
                         window.myapp = app.init(json);
-                        myapp.render('templates/home.html', {}, ei('app-content'));
+                        myapp.render('templates/home.html', json, ei('app-content'));
                     });
                 }).catch(function(){
                     console.log("Fetching user failed");

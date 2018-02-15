@@ -1,441 +1,78 @@
 (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
-
-},{}],2:[function(require,module,exports){
-(function (process){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-// resolves . and .. elements in a path array with directory names there
-// must be no slashes, empty elements, or device names (c:\) in the array
-// (so also no leading and trailing slashes - it does not distinguish
-// relative and absolute paths)
-function normalizeArray(parts, allowAboveRoot) {
-  // if the path tries to go above the root, `up` ends up > 0
-  var up = 0;
-  for (var i = parts.length - 1; i >= 0; i--) {
-    var last = parts[i];
-    if (last === '.') {
-      parts.splice(i, 1);
-    } else if (last === '..') {
-      parts.splice(i, 1);
-      up++;
-    } else if (up) {
-      parts.splice(i, 1);
-      up--;
-    }
-  }
-
-  // if the path is allowed to go above the root, restore leading ..s
-  if (allowAboveRoot) {
-    for (; up--; up) {
-      parts.unshift('..');
-    }
-  }
-
-  return parts;
-}
-
-// Split a filename into [root, dir, basename, ext], unix version
-// 'root' is just a slash, or nothing.
-var splitPathRe =
-    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
-var splitPath = function(filename) {
-  return splitPathRe.exec(filename).slice(1);
-};
-
-// path.resolve([from ...], to)
-// posix version
-exports.resolve = function() {
-  var resolvedPath = '',
-      resolvedAbsolute = false;
-
-  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-    var path = (i >= 0) ? arguments[i] : process.cwd();
-
-    // Skip empty and invalid entries
-    if (typeof path !== 'string') {
-      throw new TypeError('Arguments to path.resolve must be strings');
-    } else if (!path) {
-      continue;
-    }
-
-    resolvedPath = path + '/' + resolvedPath;
-    resolvedAbsolute = path.charAt(0) === '/';
-  }
-
-  // At this point the path should be resolved to a full absolute path, but
-  // handle relative paths to be safe (might happen when process.cwd() fails)
-
-  // Normalize the path
-  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
-    return !!p;
-  }), !resolvedAbsolute).join('/');
-
-  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
-};
-
-// path.normalize(path)
-// posix version
-exports.normalize = function(path) {
-  var isAbsolute = exports.isAbsolute(path),
-      trailingSlash = substr(path, -1) === '/';
-
-  // Normalize the path
-  path = normalizeArray(filter(path.split('/'), function(p) {
-    return !!p;
-  }), !isAbsolute).join('/');
-
-  if (!path && !isAbsolute) {
-    path = '.';
-  }
-  if (path && trailingSlash) {
-    path += '/';
-  }
-
-  return (isAbsolute ? '/' : '') + path;
-};
-
-// posix version
-exports.isAbsolute = function(path) {
-  return path.charAt(0) === '/';
-};
-
-// posix version
-exports.join = function() {
-  var paths = Array.prototype.slice.call(arguments, 0);
-  return exports.normalize(filter(paths, function(p, index) {
-    if (typeof p !== 'string') {
-      throw new TypeError('Arguments to path.join must be strings');
-    }
-    return p;
-  }).join('/'));
-};
-
-
-// path.relative(from, to)
-// posix version
-exports.relative = function(from, to) {
-  from = exports.resolve(from).substr(1);
-  to = exports.resolve(to).substr(1);
-
-  function trim(arr) {
-    var start = 0;
-    for (; start < arr.length; start++) {
-      if (arr[start] !== '') break;
-    }
-
-    var end = arr.length - 1;
-    for (; end >= 0; end--) {
-      if (arr[end] !== '') break;
-    }
-
-    if (start > end) return [];
-    return arr.slice(start, end - start + 1);
-  }
-
-  var fromParts = trim(from.split('/'));
-  var toParts = trim(to.split('/'));
-
-  var length = Math.min(fromParts.length, toParts.length);
-  var samePartsLength = length;
-  for (var i = 0; i < length; i++) {
-    if (fromParts[i] !== toParts[i]) {
-      samePartsLength = i;
-      break;
-    }
-  }
-
-  var outputParts = [];
-  for (var i = samePartsLength; i < fromParts.length; i++) {
-    outputParts.push('..');
-  }
-
-  outputParts = outputParts.concat(toParts.slice(samePartsLength));
-
-  return outputParts.join('/');
-};
-
-exports.sep = '/';
-exports.delimiter = ':';
-
-exports.dirname = function(path) {
-  var result = splitPath(path),
-      root = result[0],
-      dir = result[1];
-
-  if (!root && !dir) {
-    // No dirname whatsoever
-    return '.';
-  }
-
-  if (dir) {
-    // It has a dirname, strip trailing slash
-    dir = dir.substr(0, dir.length - 1);
-  }
-
-  return root + dir;
-};
-
-
-exports.basename = function(path, ext) {
-  var f = splitPath(path)[2];
-  // TODO: make this comparison case-insensitive on windows?
-  if (ext && f.substr(-1 * ext.length) === ext) {
-    f = f.substr(0, f.length - ext.length);
-  }
-  return f;
-};
-
-
-exports.extname = function(path) {
-  return splitPath(path)[3];
-};
-
-function filter (xs, f) {
-    if (xs.filter) return xs.filter(f);
-    var res = [];
-    for (var i = 0; i < xs.length; i++) {
-        if (f(xs[i], i, xs)) res.push(xs[i]);
-    }
-    return res;
-}
-
-// String.prototype.substr - negative index don't work in IE8
-var substr = 'ab'.substr(-1) === 'b'
-    ? function (str, start, len) { return str.substr(start, len) }
-    : function (str, start, len) {
-        if (start < 0) start = str.length + start;
-        return str.substr(start, len);
-    }
-;
-
-}).call(this,require('_process'))
-},{"_process":3}],3:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],4:[function(require,module,exports){
-exports.init = function(user){
-    var instance = {"user":user};
+exports.init = function(user) {
+    var instance = {
+        "user": user
+    };
     instance.hb = require('handlebars');
-    instance.log = function(message){
+    instance.log = function(message) {
         console.log(message);
     }
-    instance.render=function(templateURL, object, targetNode){
-        fetch(templateURL).then(function(response){
-            response.text().then(function(text){
+    instance.render = function(templateURL, object, targetNode) {
+        fetch(templateURL).then(function(response) {
+            response.text().then(function(text) {
                 targetNode.innerHTML = instance.hb.compile(text)(object);
-            }).catch(function(){
+            }).then(function() {
+                instance.menubar = ec('menu-bar')[0];
+                instance.navbar=ec('navigation-bar')[0];
+                instance.toolbar=ec('tool-area')[0];
+                instance.contextArea = ec('context-area')[0];
+                instance.navIconArea = ec('nav-icon-area')[0];
+                instance.openMenu = ec('open-menu')[0];
+                instance.openTool = ec('open-tool')[0];
+                instance.openNav = ec('open-nav')[0];
+                instance.initialize();
+            }).catch(function() {
                 console.log('Unable to read template');
             })
-        }).catch(function(){
-            console.log("fetch "+templateURL+" failed")
+        }).catch(function() {
+            console.log("fetch " + templateURL + " failed")
         })
     }
+    instance.initialize = function() {
+        instance.openMenu.addEventListener('click',instance.openMenuBar);
+        instance.menubar.addEventListener('click',instance.closeMenuBar);
+        instance.openNav.addEventListener('click',instance.openNavBar);
+        instance.navbar.addEventListener('click',instance.closeNavBar);
 
+        instance.openTool.addEventListener('click',instance.openToolBar);
+        instance.toolbar.addEventListener('click',instance.closeToolBar);
+    }
+    instance.openMenuBar = function() {
+        instance.menubar.classList.add('menu-bar-open');
+        instance.contextArea.classList.add('context-area-menu-open');
+        instance.navIconArea.classList.add('nav-icon-area-open-menu');
+    }
+    instance.closeMenuBar = function() {
+        instance.menubar.classList.remove('menu-bar-open');
+        instance.contextArea.classList.remove('context-area-menu-open');
+        instance.navIconArea.classList.remove('nav-icon-area-open-menu');
+    }
+
+    instance.openNavBar = function() {
+        instance.navbar.classList.add('navigation-bar-open');
+        instance.contextArea.classList.add('context-area-menu-open');
+        instance.navIconArea.classList.add('nav-icon-area-open-nav');
+    }
+    instance.closeNavBar = function() {
+        instance.navbar.classList.remove('navigation-bar-open');
+        instance.contextArea.classList.remove('context-area-menu-open');
+        instance.navIconArea.classList.remove('nav-icon-area-open-nav');
+    }
+
+    instance.openToolBar = function() {
+        instance.toolbar.classList.add('tool-area-open');
+        instance.contextArea.classList.add('context-area-menu-open');
+        instance.navIconArea.classList.add('nav-icon-area-open-nav');
+    }
+    instance.closeToolBar = function() {
+        instance.toolbar.classList.remove('tool-area-open');
+        instance.contextArea.classList.remove('context-area-menu-open');
+        instance.navIconArea.classList.remove('nav-icon-area-open-nav');
+    }
     return instance;
 }
-},{"handlebars":36}],5:[function(require,module,exports){
+
+},{"handlebars":33}],2:[function(require,module,exports){
 var hb = require('handlebars');
 window.ec = function(className) {
     return document.getElementsByClassName(className);
@@ -488,7 +125,7 @@ window.addEventListener('load', function(event) {
                 fetch('http://localhost:7080/user/' + id).then(function(response) {
                     response.json().then(function(json) {
                         window.myapp = app.init(json);
-                        myapp.render('templates/home.html', {}, ei('app-content'));
+                        myapp.render('templates/home.html', json, ei('app-content'));
                     });
                 }).catch(function(){
                     console.log("Fetching user failed");
@@ -498,7 +135,7 @@ window.addEventListener('load', function(event) {
     });
 }, false);
 
-},{"./app.js":4,"handlebars":36}],6:[function(require,module,exports){
+},{"./app.js":1,"handlebars":33}],3:[function(require,module,exports){
 (function (process,__filename){
 /** vim: et:ts=4:sw=4:sts=4
  * @license amdefine 1.0.1 Copyright (c) 2011-2016, The Dojo Foundation All Rights Reserved.
@@ -802,8 +439,8 @@ function amdefine(module, requireFn) {
 
 module.exports = amdefine;
 
-}).call(this,require('_process'),"/node_modules\\amdefine\\amdefine.js")
-},{"_process":3,"path":2}],7:[function(require,module,exports){
+}).call(this,require('_process'),"/node_modules/amdefine/amdefine.js")
+},{"_process":47,"path":46}],4:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -867,9 +504,10 @@ inst.Visitor = _handlebarsCompilerVisitor2['default'];
 inst['default'] = inst;
 
 exports['default'] = inst;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"./handlebars.runtime":8,"./handlebars/compiler/ast":10,"./handlebars/compiler/base":11,"./handlebars/compiler/compiler":13,"./handlebars/compiler/javascript-compiler":15,"./handlebars/compiler/visitor":18,"./handlebars/no-conflict":32}],8:[function(require,module,exports){
+
+},{"./handlebars.runtime":5,"./handlebars/compiler/ast":7,"./handlebars/compiler/base":8,"./handlebars/compiler/compiler":10,"./handlebars/compiler/javascript-compiler":12,"./handlebars/compiler/visitor":15,"./handlebars/no-conflict":29}],5:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -934,9 +572,10 @@ _handlebarsNoConflict2['default'](inst);
 inst['default'] = inst;
 
 exports['default'] = inst;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"./handlebars/base":9,"./handlebars/exception":22,"./handlebars/no-conflict":32,"./handlebars/runtime":33,"./handlebars/safe-string":34,"./handlebars/utils":35}],9:[function(require,module,exports){
+
+},{"./handlebars/base":6,"./handlebars/exception":19,"./handlebars/no-conflict":29,"./handlebars/runtime":30,"./handlebars/safe-string":31,"./handlebars/utils":32}],6:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1039,9 +678,10 @@ var log = _logger2['default'].log;
 
 exports.log = log;
 exports.createFrame = _utils.createFrame;
-exports.logger = _logger2['default'];
+exports.logger = _logger2['default'];
 
-},{"./decorators":20,"./exception":22,"./helpers":23,"./logger":31,"./utils":35}],10:[function(require,module,exports){
+
+},{"./decorators":17,"./exception":19,"./helpers":20,"./logger":28,"./utils":32}],7:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1071,9 +711,10 @@ var AST = {
 // Must be exported as an object rather than the root of the module as the jison lexer
 // must modify the object to operate properly.
 exports['default'] = AST;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{}],11:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -1120,9 +761,10 @@ function parse(input, options) {
 
   var strip = new _whitespaceControl2['default'](options);
   return strip.accept(_parser2['default'].parse(input));
-}
+}
 
-},{"../utils":35,"./helpers":14,"./parser":16,"./whitespace-control":19}],12:[function(require,module,exports){
+
+},{"../utils":32,"./helpers":11,"./parser":13,"./whitespace-control":16}],9:[function(require,module,exports){
 /* global define */
 'use strict';
 
@@ -1287,9 +929,10 @@ CodeGen.prototype = {
 };
 
 exports['default'] = CodeGen;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"../utils":35,"source-map":37}],13:[function(require,module,exports){
+
+},{"../utils":32,"source-map":34}],10:[function(require,module,exports){
 /* eslint-disable new-cap */
 
 'use strict';
@@ -1861,9 +1504,10 @@ function transformLiteralToPath(sexpr) {
       loc: literal.loc
     };
   }
-}
+}
 
-},{"../exception":22,"../utils":35,"./ast":10}],14:[function(require,module,exports){
+
+},{"../exception":19,"../utils":32,"./ast":7}],11:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2092,9 +1736,10 @@ function preparePartialBlock(open, program, close, locInfo) {
     closeStrip: close && close.strip,
     loc: this.locInfo(locInfo)
   };
-}
+}
 
-},{"../exception":22}],15:[function(require,module,exports){
+
+},{"../exception":19}],12:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3221,9 +2866,10 @@ function strictLookup(requireTerminal, compiler, parts, type) {
 }
 
 exports['default'] = JavaScriptCompiler;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"../base":9,"../exception":22,"../utils":35,"./code-gen":12}],16:[function(require,module,exports){
+
+},{"../base":6,"../exception":19,"../utils":32,"./code-gen":9}],13:[function(require,module,exports){
 // File ignored in coverage tests via setting in .istanbul.yml
 /* Jison generated parser */
 "use strict";
@@ -3961,9 +3607,10 @@ var handlebars = (function () {
     }Parser.prototype = parser;parser.Parser = Parser;
     return new Parser();
 })();exports["default"] = handlebars;
-module.exports = exports["default"];
+module.exports = exports["default"];
 
-},{}],17:[function(require,module,exports){
+
+},{}],14:[function(require,module,exports){
 /* eslint-disable new-cap */
 'use strict';
 
@@ -4148,9 +3795,10 @@ PrintVisitor.prototype.Hash = function (hash) {
 PrintVisitor.prototype.HashPair = function (pair) {
   return pair.key + '=' + this.accept(pair.value);
 };
-/* eslint-enable new-cap */
+/* eslint-enable new-cap */
 
-},{"./visitor":18}],18:[function(require,module,exports){
+
+},{"./visitor":15}],15:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4289,9 +3937,10 @@ function visitPartial(partial) {
 }
 
 exports['default'] = Visitor;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"../exception":22}],19:[function(require,module,exports){
+
+},{"../exception":19}],16:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4511,9 +4160,10 @@ function omitLeft(body, i, multiple) {
 }
 
 exports['default'] = WhitespaceControl;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"./visitor":18}],20:[function(require,module,exports){
+
+},{"./visitor":15}],17:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4528,9 +4178,10 @@ var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 
 function registerDefaultDecorators(instance) {
   _decoratorsInline2['default'](instance);
-}
+}
 
-},{"./decorators/inline":21}],21:[function(require,module,exports){
+
+},{"./decorators/inline":18}],18:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4558,9 +4209,10 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"../utils":35}],22:[function(require,module,exports){
+
+},{"../utils":32}],19:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4613,9 +4265,10 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports['default'] = Exception;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{}],23:[function(require,module,exports){
+
+},{}],20:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4660,9 +4313,10 @@ function registerDefaultHelpers(instance) {
   _helpersLog2['default'](instance);
   _helpersLookup2['default'](instance);
   _helpersWith2['default'](instance);
-}
+}
 
-},{"./helpers/block-helper-missing":24,"./helpers/each":25,"./helpers/helper-missing":26,"./helpers/if":27,"./helpers/log":28,"./helpers/lookup":29,"./helpers/with":30}],24:[function(require,module,exports){
+
+},{"./helpers/block-helper-missing":21,"./helpers/each":22,"./helpers/helper-missing":23,"./helpers/if":24,"./helpers/log":25,"./helpers/lookup":26,"./helpers/with":27}],21:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4700,9 +4354,10 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"../utils":35}],25:[function(require,module,exports){
+
+},{"../utils":32}],22:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4795,9 +4450,10 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"../exception":22,"../utils":35}],26:[function(require,module,exports){
+
+},{"../exception":19,"../utils":32}],23:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4821,9 +4477,10 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"../exception":22}],27:[function(require,module,exports){
+
+},{"../exception":19}],24:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4851,9 +4508,10 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"../utils":35}],28:[function(require,module,exports){
+
+},{"../utils":32}],25:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4878,9 +4536,10 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{}],29:[function(require,module,exports){
+
+},{}],26:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4891,9 +4550,10 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{}],30:[function(require,module,exports){
+
+},{}],27:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4925,9 +4585,10 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"../utils":35}],31:[function(require,module,exports){
+
+},{"../utils":32}],28:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -4973,9 +4634,10 @@ var logger = {
 };
 
 exports['default'] = logger;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{"./utils":35}],32:[function(require,module,exports){
+
+},{"./utils":32}],29:[function(require,module,exports){
 (function (global){
 /* global window */
 'use strict';
@@ -4995,10 +4657,11 @@ exports['default'] = function (Handlebars) {
   };
 };
 
-module.exports = exports['default'];
+module.exports = exports['default'];
+
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],33:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5304,9 +4967,10 @@ function executeDecorators(fn, prog, container, depths, data, blockParams) {
     Utils.extend(prog, props);
   }
   return prog;
-}
+}
 
-},{"./base":9,"./exception":22,"./utils":35}],34:[function(require,module,exports){
+
+},{"./base":6,"./exception":19,"./utils":32}],31:[function(require,module,exports){
 // Build out our basic SafeString type
 'use strict';
 
@@ -5320,9 +4984,10 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
 };
 
 exports['default'] = SafeString;
-module.exports = exports['default'];
+module.exports = exports['default'];
 
-},{}],35:[function(require,module,exports){
+
+},{}],32:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -5445,9 +5110,10 @@ function blockParams(params, ids) {
 
 function appendContextPath(contextPath, id) {
   return (contextPath ? contextPath + '.' : '') + id;
-}
+}
 
-},{}],36:[function(require,module,exports){
+
+},{}],33:[function(require,module,exports){
 // USAGE:
 // var handlebars = require('handlebars');
 /* eslint-disable no-var */
@@ -5474,7 +5140,7 @@ if (typeof require !== 'undefined' && require.extensions) {
   require.extensions['.hbs'] = extension;
 }
 
-},{"../dist/cjs/handlebars":7,"../dist/cjs/handlebars/compiler/printer":17,"fs":1}],37:[function(require,module,exports){
+},{"../dist/cjs/handlebars":4,"../dist/cjs/handlebars/compiler/printer":14,"fs":45}],34:[function(require,module,exports){
 /*
  * Copyright 2009-2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE.txt or:
@@ -5484,7 +5150,7 @@ exports.SourceMapGenerator = require('./source-map/source-map-generator').Source
 exports.SourceMapConsumer = require('./source-map/source-map-consumer').SourceMapConsumer;
 exports.SourceNode = require('./source-map/source-node').SourceNode;
 
-},{"./source-map/source-map-consumer":44,"./source-map/source-map-generator":45,"./source-map/source-node":46}],38:[function(require,module,exports){
+},{"./source-map/source-map-consumer":41,"./source-map/source-map-generator":42,"./source-map/source-node":43}],35:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -5593,7 +5259,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":47,"amdefine":6}],39:[function(require,module,exports){
+},{"./util":44,"amdefine":3}],36:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -5741,7 +5407,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./base64":40,"amdefine":6}],40:[function(require,module,exports){
+},{"./base64":37,"amdefine":3}],37:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -5816,7 +5482,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":6}],41:[function(require,module,exports){
+},{"amdefine":3}],38:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -5935,7 +5601,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":6}],42:[function(require,module,exports){
+},{"amdefine":3}],39:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
@@ -6023,7 +5689,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./util":47,"amdefine":6}],43:[function(require,module,exports){
+},{"./util":44,"amdefine":3}],40:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -6145,7 +5811,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":6}],44:[function(require,module,exports){
+},{"amdefine":3}],41:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7224,7 +6890,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":38,"./base64-vlq":39,"./binary-search":41,"./quick-sort":43,"./util":47,"amdefine":6}],45:[function(require,module,exports){
+},{"./array-set":35,"./base64-vlq":36,"./binary-search":38,"./quick-sort":40,"./util":44,"amdefine":3}],42:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -7625,7 +7291,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./array-set":38,"./base64-vlq":39,"./mapping-list":42,"./util":47,"amdefine":6}],46:[function(require,module,exports){
+},{"./array-set":35,"./base64-vlq":36,"./mapping-list":39,"./util":44,"amdefine":3}],43:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8041,7 +7707,7 @@ define(function (require, exports, module) {
 
 });
 
-},{"./source-map-generator":45,"./util":47,"amdefine":6}],47:[function(require,module,exports){
+},{"./source-map-generator":42,"./util":44,"amdefine":3}],44:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -8413,4 +8079,420 @@ define(function (require, exports, module) {
 
 });
 
-},{"amdefine":6}]},{},[5]);
+},{"amdefine":3}],45:[function(require,module,exports){
+
+},{}],46:[function(require,module,exports){
+(function (process){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// resolves . and .. elements in a path array with directory names there
+// must be no slashes, empty elements, or device names (c:\) in the array
+// (so also no leading and trailing slashes - it does not distinguish
+// relative and absolute paths)
+function normalizeArray(parts, allowAboveRoot) {
+  // if the path tries to go above the root, `up` ends up > 0
+  var up = 0;
+  for (var i = parts.length - 1; i >= 0; i--) {
+    var last = parts[i];
+    if (last === '.') {
+      parts.splice(i, 1);
+    } else if (last === '..') {
+      parts.splice(i, 1);
+      up++;
+    } else if (up) {
+      parts.splice(i, 1);
+      up--;
+    }
+  }
+
+  // if the path is allowed to go above the root, restore leading ..s
+  if (allowAboveRoot) {
+    for (; up--; up) {
+      parts.unshift('..');
+    }
+  }
+
+  return parts;
+}
+
+// Split a filename into [root, dir, basename, ext], unix version
+// 'root' is just a slash, or nothing.
+var splitPathRe =
+    /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+var splitPath = function(filename) {
+  return splitPathRe.exec(filename).slice(1);
+};
+
+// path.resolve([from ...], to)
+// posix version
+exports.resolve = function() {
+  var resolvedPath = '',
+      resolvedAbsolute = false;
+
+  for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+    var path = (i >= 0) ? arguments[i] : process.cwd();
+
+    // Skip empty and invalid entries
+    if (typeof path !== 'string') {
+      throw new TypeError('Arguments to path.resolve must be strings');
+    } else if (!path) {
+      continue;
+    }
+
+    resolvedPath = path + '/' + resolvedPath;
+    resolvedAbsolute = path.charAt(0) === '/';
+  }
+
+  // At this point the path should be resolved to a full absolute path, but
+  // handle relative paths to be safe (might happen when process.cwd() fails)
+
+  // Normalize the path
+  resolvedPath = normalizeArray(filter(resolvedPath.split('/'), function(p) {
+    return !!p;
+  }), !resolvedAbsolute).join('/');
+
+  return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+};
+
+// path.normalize(path)
+// posix version
+exports.normalize = function(path) {
+  var isAbsolute = exports.isAbsolute(path),
+      trailingSlash = substr(path, -1) === '/';
+
+  // Normalize the path
+  path = normalizeArray(filter(path.split('/'), function(p) {
+    return !!p;
+  }), !isAbsolute).join('/');
+
+  if (!path && !isAbsolute) {
+    path = '.';
+  }
+  if (path && trailingSlash) {
+    path += '/';
+  }
+
+  return (isAbsolute ? '/' : '') + path;
+};
+
+// posix version
+exports.isAbsolute = function(path) {
+  return path.charAt(0) === '/';
+};
+
+// posix version
+exports.join = function() {
+  var paths = Array.prototype.slice.call(arguments, 0);
+  return exports.normalize(filter(paths, function(p, index) {
+    if (typeof p !== 'string') {
+      throw new TypeError('Arguments to path.join must be strings');
+    }
+    return p;
+  }).join('/'));
+};
+
+
+// path.relative(from, to)
+// posix version
+exports.relative = function(from, to) {
+  from = exports.resolve(from).substr(1);
+  to = exports.resolve(to).substr(1);
+
+  function trim(arr) {
+    var start = 0;
+    for (; start < arr.length; start++) {
+      if (arr[start] !== '') break;
+    }
+
+    var end = arr.length - 1;
+    for (; end >= 0; end--) {
+      if (arr[end] !== '') break;
+    }
+
+    if (start > end) return [];
+    return arr.slice(start, end - start + 1);
+  }
+
+  var fromParts = trim(from.split('/'));
+  var toParts = trim(to.split('/'));
+
+  var length = Math.min(fromParts.length, toParts.length);
+  var samePartsLength = length;
+  for (var i = 0; i < length; i++) {
+    if (fromParts[i] !== toParts[i]) {
+      samePartsLength = i;
+      break;
+    }
+  }
+
+  var outputParts = [];
+  for (var i = samePartsLength; i < fromParts.length; i++) {
+    outputParts.push('..');
+  }
+
+  outputParts = outputParts.concat(toParts.slice(samePartsLength));
+
+  return outputParts.join('/');
+};
+
+exports.sep = '/';
+exports.delimiter = ':';
+
+exports.dirname = function(path) {
+  var result = splitPath(path),
+      root = result[0],
+      dir = result[1];
+
+  if (!root && !dir) {
+    // No dirname whatsoever
+    return '.';
+  }
+
+  if (dir) {
+    // It has a dirname, strip trailing slash
+    dir = dir.substr(0, dir.length - 1);
+  }
+
+  return root + dir;
+};
+
+
+exports.basename = function(path, ext) {
+  var f = splitPath(path)[2];
+  // TODO: make this comparison case-insensitive on windows?
+  if (ext && f.substr(-1 * ext.length) === ext) {
+    f = f.substr(0, f.length - ext.length);
+  }
+  return f;
+};
+
+
+exports.extname = function(path) {
+  return splitPath(path)[3];
+};
+
+function filter (xs, f) {
+    if (xs.filter) return xs.filter(f);
+    var res = [];
+    for (var i = 0; i < xs.length; i++) {
+        if (f(xs[i], i, xs)) res.push(xs[i]);
+    }
+    return res;
+}
+
+// String.prototype.substr - negative index don't work in IE8
+var substr = 'ab'.substr(-1) === 'b'
+    ? function (str, start, len) { return str.substr(start, len) }
+    : function (str, start, len) {
+        if (start < 0) start = str.length + start;
+        return str.substr(start, len);
+    }
+;
+
+}).call(this,require('_process'))
+},{"_process":47}],47:[function(require,module,exports){
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}]},{},[2]);

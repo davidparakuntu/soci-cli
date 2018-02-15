@@ -1,9 +1,16 @@
 <div class="home-container">
     <div class="navigation-bar"></div>
     <div class="content">
-        <div class="menu-bar"></div>
-        <div class="conetnt-area">
-            <div class="play-area"></div>
+        <div class="menu-bar">
+        {{name.firstName}}
+        </div>
+        <div class="content-area">
+            <div class="play-area">
+                <div class="nav-icon-area">
+                <span class="open-nav">&#x2630;</span><span class="user-name-nav">{{name.firstName}} {{name.lastName}}</span><span class="open-menu">&#x2630;</span><span class="search-box-small"></span><span class="open-tool">&#x2630;</span>
+                </div>
+                <div class="context-area"></div>
+            </div>
             <div class="tool-area"></div>
         </div>
     </div>
