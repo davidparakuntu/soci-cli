@@ -87,6 +87,7 @@
     position: relative;
     display: flex;
     flex-direction: row;
+    left: -6%;
     /* justify-content: start; */
 }
 
@@ -174,9 +175,9 @@
 
 .button {
     width: 100px;
-    ; height: 25px;
+    height: 25px;
     text-align: center;
-    left: 34px;
+    left: 0px;
     background-color: rgb(136,92,32);
     cursor: pointer;
     margin: 5px;
