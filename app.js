@@ -1,4 +1,5 @@
 exports.init = function(user) {
+    navigator.serviceWorker.register('SW.js');
     var instance = {
         "user": user
     };

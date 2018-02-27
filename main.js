@@ -416,6 +416,7 @@ process.umask = function() { return 0; };
 
 },{}],4:[function(require,module,exports){
 exports.init = function(user) {
+    navigator.serviceWorker.register('SW.js');
     var instance = {
         "user": user
     };
