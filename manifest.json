@@ -1,7 +1,6 @@
 {
   "short_name": "Soci",
-  "name": "Experimental Social Networking",
-  "display": "standalone",
+  "name": "Soci.net",
   "icons": [
     {
       "src": "images/gate-1x.png",
@@ -19,5 +18,9 @@
       "sizes": "192x192"
     }
   ],
-  "start_url": "index.html"
+  "start_url": "index.html",
+  "background_color": "#FAFAFA",
+  "theme_color" : "#512DA8",
+  "display": "standalone",
+  "orientation": "portrait"
 }

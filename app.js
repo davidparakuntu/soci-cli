@@ -6,9 +6,20 @@ exports.init = function(user) {
         "user": user
     };
     instance.hb = require('handlebars');
+    instance.hb.registerHelper('eq', function(arg1, arg2, options) {
+        return arg1 == arg2 ? options.fn(this) : options.inverse(this);
+    });
+    instance.hb.registerHelper('ttype', function(arg1, options) {
+        if (arg1 == 'text' || arg1 == 'email' || arg1 == 'tel' || arg1 == 'number' || arg1 == 'password') {
+            return options.fn(this);
+        } else {
+            return options.inverse(this);
+        }
+    });
     instance.log = function(message) {
         console.log(message);
     }
+    instance.hb.register
     instance.render = function(templateURL, object, targetNode) {
         fetch(templateURL).then(function(response) {
             response.text().then(function(text) {
@@ -74,6 +85,27 @@ exports.init = function(user) {
         })
 
     }
+
+    instance.showForm = function(object, actionclassMap, targetNode) {
+        var templateURL = "templates/form.html";
+        fetch(templateURL).then(function(response) {
+            response.text().then(function(text) {
+                targetNode.innerHTML = instance.hb.compile(text)(object);
+                console.log('reading template success');
+            }).then(function(msg) {
+                console.log(msg + " in succ");
+                actionclassMap.forEach(function(actionClass) {
+                    ec(actionClass.actionClass)[0].addEventListener('click', actionClass.action);
+                });
+            }).catch(function(msg) {
+                console.log(msg)
+                console.log('Unable to read template');
+            })
+        }).catch(function() {
+            console.log("fetch " + templateURL + " failed")
+        })
+
+    }
     instance.renderLogin = function() {
 
         fetch('templates/login.html').then(function(res) {
@@ -111,24 +143,170 @@ exports.init = function(user) {
                         console.log("Fetching user failed");
                         navigator.serviceWorker.addEventListener('message', function(event) {
                             app.user = event.data;
-                            app.render('templates/home.html', event.data, ei('app-content'));
+                            if (app.user.id) {
+                                app.render('templates/home.html', event.data, ei('app-content'));
+                            } else {
+                                console.log('Login failed..');
+                            }
+
                         });
                         srg.active.postMessage({
                             "message": "login",
-                            "user":user
+                            "user": user
                         });
 
                     });
                 });
 
                 ec('reg-link')[0].addEventListener('click', function() {
-                    window.app.renderRegister('templates/register.html', {}, ei('app-content'));
+                    //window.app.renderRegister('templates/register.html', {}, ei('app-content'));
+                    let user = {};
+                    user.contact = {};
+                    user.name = {};
+                    var formObj = {
+                        "user": user
+                    };
+                    formObj.fields = instance.page1Form;
+                    var actionMap = [{
+                        "actionClass": "submit-button",
+                        "action": function(event) {
+                            if (instance.fillUser(user)) {
+                                instance.submitReg(user);
+                            }
+                        }
+                    }, {
+                        "actionClass": "next-button",
+                        "action": function(event) {
+                            if (instance.fillUser(user)) {
+                                formObj.fields = instance.page2Form;
+                                instance.showForm(formObj, actionMap, ei('app-content'));
+                            }
+                        }
+                    }, {
+                        "actionClass": "back-button",
+                        "action": function(event) {
+                            if (instance.fillUser(user)) {
+                                formObj.fields = instance.page2Form;
+                                instance.showForm(formObj, actionMap, ei('app-content'));
+                            }
+                        }
+                    }];
+
+                    window.app.showForm(formObj, actionMap, ei('app-content'));
 
                 });
             });
         });
         navigator.serviceWorker.getRegistration().then(function(registration) {
             window.sw = registration.active
+        });
+    }
+    instance.fillUser = function(user) {
+        user.id = en('emailId')[0].value;
+        user.name.firstName = en('first-name')[0].value;
+        user.name.lastName = en('last-name')[0].value;
+        user.name.displayName = user.name.firstName + ' ' + user.name.lastName;
+        user.name.fullName = user.name.displayName;
+        user.contact.mobileNumber = [en('mobile-number')[0].value];
+        user.contact.emailIDs = [user.id];
+        let password = en('password-one')[0].value;
+        if (password === en('password-two')[0].value) {
+            user.password = password;
+            return user;
+        } else {
+            console.log('password did not match');
+            return undefined;
+        }
+    }
+    instance.page1Form = [{
+        "type": "text",
+        "name": "first-name",
+        "label": "First Name"
+    }, {
+        "type": "text",
+        "name": "last-name",
+        "label": "Last Name"
+    }, {
+        "type": "tel",
+        "name": "mobile-number",
+        "label": "Mobile Number"
+    }, {
+        "type": "email",
+        "name": "emailId",
+        "label": "E-Mail ID"
+    }, {
+        "type": "password",
+        "name": "password-one",
+        "label": "Password"
+    }, {
+        "type": "password",
+        "name": "password-two",
+        "label": "Confirm Password"
+    }, {
+        "type": "action",
+        "actionClass": "submit-button",
+        "label": "Submit"
+    }, {
+        "type": "action",
+        "actionClass": "reset-button",
+        "label": "Reset"
+    }, {
+        "type": "action",
+        "actionClass": "next-button",
+        "label": "Next"
+    }]
+
+    instance.page2Form = [{
+        "type": "range",
+        "name": "age",
+        "label": "Age",
+        "min":"6",
+        "max":"70"
+    }, {
+        "type": "date",
+        "name": "date-of-birth",
+        "label": "Date of Birth"
+    }, {
+        "type": "text",
+        "name": "house-number",
+        "label": "House Number"
+    }, {
+        "type": "text",
+        "name": "street-name",
+        "label": "Street Name"
+    }, {
+        "type": "text",
+        "name": "post-name",
+        "label": "Post"
+    }, {
+        "type": "number",
+        "name": "pincode",
+        "label": "Pin"
+    }, {
+        "type": "action",
+        "actionClass": "submit-button",
+        "label": "Submit"
+    }, {
+        "type": "action",
+        "actionClass": "back-button",
+        "label": "Back"
+    }, {
+        "type": "action",
+        "actionClass": "next-button",
+        "label": "Next"
+    }]
+    instance.submitReg = function(user) {
+        fetch('http://localhost:7080/user', {
+            method: "POST",
+            body: JSON.stringify(user),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        }).then(function() {
+            console.log('Posted the user');
+            app.renderLogin();
+        }).catch(function() {
+            console.log('Issues');
         });
     }
     instance.initialize = function() {

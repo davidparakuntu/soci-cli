@@ -23,10 +23,11 @@ self.addEventListener('message',function(event){
             break;
       case 'login':
             console.log(event.data);
+            self.initDB("mydb","users","id");
             var trObjectStore = self.config.db.transaction("users","readwrite").objectStore("users");
             var userRequest = trObjectStore.get(event.data.user.id);
             userRequest.onsuccess = function(evt){
-                self.postToClient(event.source,evt.result);
+                self.postToClient(event.source,evt.target.result);
             }
             break;
       default:
@@ -61,7 +62,7 @@ self.addEventListener('activate', function(event) {
     }());
 });
 self.addEventListener('fetch', function(event) {
-    event.respondWith(caches.match(event.request).then(function(response) {
+    event.respondWith(caches.match(event.request.clone()).then(function(response) {
             if(response){
               return response.clone();
             }else{

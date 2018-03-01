@@ -1,0 +1,35 @@
+<div class="form-div">
+    <div class="form-fields">
+        {{#each this.fields}}
+            {{#ttype type}}
+                <div class="field">
+                    <input type="{{type}}" class="text-input" name="{{name}}" required tabindex="{{tabindex}}">
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label class="label">{{label}}</label>
+                </div>
+            {{/ttype}}
+           
+            {{#eq type 'range'}}
+                <div class="field">
+                    <input type="{{type}}" class="range-input" name="{{name}}" min="{{min}}" max="{{max}}" required tabindex="{{tabindex}}">
+                    <label class="label">{{label}}</label>
+                </div>
+            {{/eq}}
+
+            {{#eq type 'date'}}
+                <div class="field">
+                    <input type="{{type}}" class="date-input" name="{{name}}" required tabindex="{{tabindex}}">
+                    <label class="label">{{label}}</label>
+                </div>
+            {{/eq}}
+        {{/each}}
+        <div class="register-action-panel">
+            {{#each this.fields}}
+                {{#eq type 'action'}}
+                    <span class="{{actionClass}} button" tabindex="{{tabindex}}">{{label}}</span>
+                {{/eq}}   
+            {{/each}}
+         </div>
+    </div>
+</div>
