@@ -416,7 +416,9 @@ process.umask = function() { return 0; };
 
 },{}],4:[function(require,module,exports){
 exports.init = function(user) {
-    navigator.serviceWorker.register('SW.js');
+    navigator.serviceWorker.register('SW.js').then(function(reg) {
+        window.srg = reg;
+    });
     var instance = {
         "user": user
     };
@@ -490,6 +492,7 @@ exports.init = function(user) {
 
     }
     instance.renderLogin = function() {
+
         fetch('templates/login.html').then(function(res) {
             res.text().then(function(text) {
                 let template = instance.hb.compile(text);
@@ -513,12 +516,25 @@ exports.init = function(user) {
                         } else {
                             response.json().then(function(json) {
                                 app.user = json;
+                                srg.active.postMessage({
+                                    "message": "insertUser",
+                                    "user": json
+                                });
                                 app.render('templates/home.html', json, ei('app-content'));
                             });
                         }
 
                     }).catch(function() {
                         console.log("Fetching user failed");
+                        navigator.serviceWorker.addEventListener('message', function(event) {
+                            app.user = event.data;
+                            app.render('templates/home.html', event.data, ei('app-content'));
+                        });
+                        srg.active.postMessage({
+                            "message": "login",
+                            "user":user
+                        });
+
                     });
                 });
 
@@ -527,6 +543,9 @@ exports.init = function(user) {
 
                 });
             });
+        });
+        navigator.serviceWorker.getRegistration().then(function(registration) {
+            window.sw = registration.active
         });
     }
     instance.initialize = function() {

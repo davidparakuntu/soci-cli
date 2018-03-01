@@ -1,0 +1,23 @@
+{
+  "short_name": "Soci",
+  "name": "Experimental Social Networking",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "images/gate-1x.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "images/gate-2x.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "images/gate-4x.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "index.html"
+}
