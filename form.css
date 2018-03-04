@@ -131,8 +131,21 @@
 
 .calendar-month{
     height: 80%;
+    display:flex;
+    flex-direction:column;
 }
-
+.calendar-week{
+    display:flex;
+    flex-direction:row;
+    height: 14%;
+    /* width: 14%; */
+}
+.calendar-week-header{
+    display:flex;
+    flex-direction:row;
+    height: 14%;
+    /* width: 14%; */
+}
 .calendar-nav-disp{
     width: 80%;
 }
@@ -140,3 +153,8 @@
     width: 10%;
 }
 .calendar-nav-right{width: 10%;}
+.calendar-day-name{width: 14%;text-align: center;}
+.calendar-day{
+    width: 14%;
+    text-align: center;
+}

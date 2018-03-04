@@ -1,12 +1,29 @@
-    <div class="calendar">
-        <div class="calendar-header"></div>
-        <div class="calendar-page">
-            <div class="calendar-nav">
-                <div class="calendar-nav-left"></div>
-                <div class="calendar-nav-disp"></div>
-                <div class="calendar-nav-right"></div>
-            </div>
-            <div class="calendar-month"></div>
-            <div class="calendar-footer"></div>
+<div class="calendar">
+    <div class="calendar-header"></div>
+    <div class="calendar-page">
+        <div class="calendar-nav">
+            <div class="calendar-nav-left"></div>
+            <div class="calendar-nav-disp"></div>
+            <div class="calendar-nav-right"></div>
         </div>
+        <div class="calendar-month">
+            <div class="calendar-week-header">
+                {{#each this.weekDays}}
+                <span class="calendar-day-name">{{shortName}}</span>
+                {{/each}}
+            </div>
+            {{#each this.weeks}}
+            <div class="calendar-week">
+                {{#each this}}
+                {{#if this}}
+                <span class="calendar-day">{{this}}</span>
+                {{else}}
+                <span class="calendar-day"></span>
+                {{/if}}
+                {{/each}}
+            </div>
+            {{/each}}
+        </div>
+        <div class="calendar-footer"></div>
     </div>
+</div>

@@ -27,12 +27,38 @@ module.exports = function() {
 
     }
 
+    window.month = {
+        weekDays: [{
+            name: "Sunday",
+            shortName: "Sun"
+        }, {
+            name: "Monday",
+            shortName: "Mon"
+        }, {
+            name: "Tuesday",
+            shortName: "Tue"
+        }, {
+            name: "Wednesday",
+            shortName: "Wed"
+        }, {
+            name: "Thursday",
+            shortName: "Thu"
+        }, {
+            name: "Friday",
+            shortName: "Fri"
+        }, {
+            name: "Saturday",
+            shortName: "Sat"
+        }],
+        weeks: [[, , , 1, 2, 3, 4], [5, 9, 10, 11, 12, 13, 14], [15, 16, 17, 18, 19, 20, 21], [22, 23, 24, 25, 26, 27, 28], [29, 30, 31, 1, 2, 3, 4], [5, 6, 7, 8, 9, 10, 11]]
+    };
+
     window.showCalendar = function(parentNode) {
         var templateURL = "templates/calendar.html";
         fetch(templateURL).then(function(response) {
             response.text().then(function(text) {
-                parentNode.innerHTML = hb.compile(text)({});
-                ec('calendar-holder')[0].style.display="block";
+                parentNode.innerHTML = hb.compile(text)(window.month);
+                ec('calendar-holder')[0].style.display = "block";
             });
         });
 
