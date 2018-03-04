@@ -417,10 +417,8 @@ module.exports = function() {
             }
             if (dragFlag) {
                 var pageX = e.layerX;
-                var outerX = parseInt(getComputedStyle(outerThumb).left, 10);
-                var thumpX = pageX - outerX - 8;
-                outerThumb.style.left = outerX + thumpX - 16;
-                trackFill.style.width = outerX + 8;
+                outerThumb.style.left = pageX - 16;
+                trackFill.style.width = pageX;
             }
 
         })
@@ -439,10 +437,10 @@ module.exports = function() {
             }
             var touch = e.touches[0];
             var pageX = touch.pageX - touch.target.getBoundingClientRect().x;
-            var outerX = parseInt(getComputedStyle(outerThumb).left, 10);
-            var thumpX = pageX - outerX - 8;
-            outerThumb.style.left = outerX + thumpX - 16;
-            trackFill.style.width = outerX + 9;
+            //var outerX = parseInt(getComputedStyle(outerThumb).left, 10);
+            //var thumpX = pageX - outerX - 8;
+            outerThumb.style.left = pageX - 16;
+            trackFill.style.width = pageX;
         })
         range.addEventListener('touchend', function(e) {
             outerThumb.style.backgroundColor = "transparent";
