@@ -99,6 +99,7 @@ exports.init = function(user) {
                     }
                 }
 
+                activateCalendar(ec('calendar-button'));
                 console.log('reading template success');
             }).then(function(msg) {
                 console.log(msg + " in succ");
@@ -274,7 +275,8 @@ exports.init = function(user) {
     }, {
         "type": "date",
         "name": "date-of-birth",
-        "label": "Date of Birth"
+        "label": "Date of Birth",
+        "value":new Date()
     }, {
         "type": "text",
         "name": "house-number",
@@ -374,6 +376,35 @@ module.exports = function() {
         return document.getElementById(id);
     }
 
+    window.activateCalendar = function(calButtons) {
+        var inst = {};
+        inst.calendar = ec('calendar')[0];
+        for (var i = 0; i < calButtons.length; i++) {
+            var calButton = calButtons[i];
+            calButton.addEventListener('click', function(event) {
+                showCalendar(ec('calendar-holder')[0]);
+            });
+            calButton.addEventListener('touchstart', function(event) {
+                showCalendar(ec('calendar-holder')[0]);
+            });
+            calButton.addEventListener('mousedown', function(event) {
+                showCalendar(ec('calendar-holder')[0]);
+            });
+        }
+
+    }
+
+    window.showCalendar = function(parentNode) {
+        var templateURL = "templates/calendar.html";
+        fetch(templateURL).then(function(response) {
+            response.text().then(function(text) {
+                parentNode.innerHTML = hb.compile(text)({});
+                ec('calendar-holder')[0].style.display="block";
+            });
+        });
+
+    }
+
     window.activateRange = function(range) {
         var inst = {};
         inst.track = range.firstElementChild;
@@ -387,7 +418,7 @@ module.exports = function() {
 
             var pageX = e.layerX;
 
-            inst.outerThumb.style.left = pageX-16;
+            inst.outerThumb.style.left = pageX - 16;
             inst.trackFill.style.width = pageX;
             inst.outerThumb.style.backgroundColor = "transparent";
 
@@ -427,7 +458,7 @@ module.exports = function() {
             inst.outerThumb.style.backgroundColor = "transparent";
         });
 
-        inst.removeAnimation = function(){
+        inst.removeAnimation = function() {
             if (inst.trackFill.classList.contains('track-fill-anim')) {
                 inst.trackFill.classList.remove('track-fill-anim');
             }
@@ -435,7 +466,7 @@ module.exports = function() {
                 inst.outerThumb.classList.remove('thumb-anim');
             }
         }
-        inst.addAnimation = function(){
+        inst.addAnimation = function() {
             if (!inst.trackFill.classList.contains('track-fill-anim')) {
                 inst.trackFill.classList.add('track-fill-anim');
             }

@@ -98,6 +98,7 @@ exports.init = function(user) {
                     }
                 }
 
+                activateCalendar(ec('calendar-button'));
                 console.log('reading template success');
             }).then(function(msg) {
                 console.log(msg + " in succ");
@@ -273,7 +274,8 @@ exports.init = function(user) {
     }, {
         "type": "date",
         "name": "date-of-birth",
-        "label": "Date of Birth"
+        "label": "Date of Birth",
+        "value":new Date()
     }, {
         "type": "text",
         "name": "house-number",

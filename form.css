@@ -1,9 +1,10 @@
+/*****Slider********/
 .form-div {
     display: flex;
     flex-direction: row;
-    height: 64%;
-    width: 90%;
-    top: 10%;
+    height: 100%;
+    width: 100%;
+    /* top: 10%; */
     /* left: 10%; */
 }
 
@@ -16,7 +17,7 @@
 }
 .form-field {
     width: 100%;
-    margin-bottom: 43px;
+    margin-bottom: 38px;
     position: relative;
     cursor: pointer;
 }
@@ -84,3 +85,58 @@
     transition-property: left;
     transition-duration: .5s;
 }
+
+/*********** Calender *********/
+.calendar-holder{
+    position:relative;
+    height: 100%;
+    display: none;
+}
+.calendar{
+    display: flex;
+    flex-direction:column;
+    position: absolute;
+    float: left;
+    left: 5%;
+    right: 5%;
+    width: 90%;
+    height: 80%;
+    top: 5%;
+    bottom: 10%;
+    /* background-color: grey; */
+    z-index: 10;
+    box-shadow: 8px 20px 20px 10px rgba(202, 199, 199, 0.91);
+    /* top: 1; */
+}
+.calendar-header{
+    height:20%;
+    background-color: #0c9ea7;
+}
+.calendar-nav{
+    height:10%;
+    display:flex;
+    flex-direction:row;
+    background-color: white;
+}
+.calendar-page{
+    height: 80%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+}
+.calendar-footer{
+    height:10%;
+    background-color: white;
+}
+
+.calendar-month{
+    height: 80%;
+}
+
+.calendar-nav-disp{
+    width: 80%;
+}
+.calendar-nav-left{
+    width: 10%;
+}
+.calendar-nav-right{width: 10%;}

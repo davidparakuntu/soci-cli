@@ -170,7 +170,7 @@
 #app-content {
     width: calc(100vw);
     height: calc(100vh);
-    margin-left: 45px;
+    /* margin-left: 2%; */
 }
 
 .button:active ~ .button {
