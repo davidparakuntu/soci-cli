@@ -10,76 +10,74 @@ module.exports = function() {
     }
 
     window.activateRange = function(range) {
-        var track = range.firstElementChild;
-        var outerThumb = track.firstElementChild;
-        var thump = outerThumb.firstElementChild;
-        var trackFill = range.lastElementChild;
-        var dragFlag = false;
+        var inst = {};
+        inst.track = range.firstElementChild;
+        inst.outerThumb = inst.track.firstElementChild;
+        inst.thump = inst.outerThumb.firstElementChild;
+        inst.trackFill = range.lastElementChild;
+        inst.dragFlag = false;
         range.addEventListener('click', function(e) {
-            outerThumb.style.backgroundColor = "rgba(185, 18, 18, .5)";
-            if (!trackFill.classList.contains('track-fill-anim')) {
-                trackFill.classList.add('track-fill-anim');
-            }
-            if (!outerThumb.classList.contains('thumb-anim')) {
-                outerThumb.classList.add('thumb-anim');
-            }
+            inst.outerThumb.style.backgroundColor = "rgba(185, 18, 18, .5)";
+            inst.addAnimation();
 
             var pageX = e.layerX;
-            var outerX = parseInt(getComputedStyle(outerThumb).left, 10);
-            var thumpX = pageX - outerX - 8;
-            //thump.style.left=thumpX;
-            var newWidth = outerX + thumpX - 8;
-            outerThumb.style.left = newWidth;
-            trackFill.style.width = newWidth + 9;
-            outerThumb.style.backgroundColor = "transparent";
+
+            inst.outerThumb.style.left = pageX-16;
+            inst.trackFill.style.width = pageX;
+            inst.outerThumb.style.backgroundColor = "transparent";
 
         });
 
         range.addEventListener('mouseup', function(e) {
-            outerThumb.style.backgroundColor = "transparent";
-            dragFlag = false;
+            inst.outerThumb.style.backgroundColor = "transparent";
+            inst.dragFlag = false;
         });
         range.addEventListener('mousedown', function(e) {
-            outerThumb.style.backgroundColor = "rgba(185, 18, 18, .5)";
-            dragFlag = true;
+            inst.outerThumb.style.backgroundColor = "rgba(185, 18, 18, .5)";
+            inst.dragFlag = true;
         });
         range.addEventListener('mousemove', function(e) {
-            if (trackFill.classList.contains('track-fill-anim')) {
-                trackFill.classList.remove('track-fill-anim');
-            }
-            if (outerThumb.classList.contains('thumb-anim')) {
-                outerThumb.classList.remove('thumb-anim');
-            }
-            if (dragFlag) {
+            inst.removeAnimation();
+            if (inst.dragFlag) {
                 var pageX = e.layerX;
-                outerThumb.style.left = pageX - 16;
-                trackFill.style.width = pageX;
+                inst.outerThumb.style.left = pageX - 16;
+                inst.trackFill.style.width = pageX;
             }
 
-        })
+        });
         range.addEventListener('oncontextmenu', function(e) {
             e.preventDefault();
-        })
+        });
         range.addEventListener('touchstart', function(e) {
-            outerThumb.style.backgroundColor = "rgba(185, 18, 18, .5)";
-        })
+            inst.outerThumb.style.backgroundColor = "rgba(185, 18, 18, .5)";
+        });
         range.addEventListener('touchmove', function(e) {
-            if (trackFill.classList.contains('track-fill-anim')) {
-                trackFill.classList.remove('track-fill-anim');
-            }
-            if (outerThumb.classList.contains('thumb-anim')) {
-                outerThumb.classList.remove('thumb-anim');
-            }
+            inst.removeAnimation();
             var touch = e.touches[0];
             var pageX = touch.pageX - touch.target.getBoundingClientRect().x;
-            //var outerX = parseInt(getComputedStyle(outerThumb).left, 10);
-            //var thumpX = pageX - outerX - 8;
-            outerThumb.style.left = pageX - 16;
-            trackFill.style.width = pageX;
-        })
+            inst.outerThumb.style.left = pageX - 16;
+            inst.trackFill.style.width = pageX;
+        });
         range.addEventListener('touchend', function(e) {
-            outerThumb.style.backgroundColor = "transparent";
-        })
+            inst.outerThumb.style.backgroundColor = "transparent";
+        });
+
+        inst.removeAnimation = function(){
+            if (inst.trackFill.classList.contains('track-fill-anim')) {
+                inst.trackFill.classList.remove('track-fill-anim');
+            }
+            if (inst.outerThumb.classList.contains('thumb-anim')) {
+                inst.outerThumb.classList.remove('thumb-anim');
+            }
+        }
+        inst.addAnimation = function(){
+            if (!inst.trackFill.classList.contains('track-fill-anim')) {
+                inst.trackFill.classList.add('track-fill-anim');
+            }
+            if (!inst.outerThumb.classList.contains('thumb-anim')) {
+                inst.outerThumb.classList.add('thumb-anim');
+            }
+        }
 
     }
 }
