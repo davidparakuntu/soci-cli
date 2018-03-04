@@ -9,6 +9,10 @@ exports.init = function(user) {
     instance.hb.registerHelper('eq', function(arg1, arg2, options) {
         return arg1 == arg2 ? options.fn(this) : options.inverse(this);
     });
+
+    instance.hb.registerHelper('neq', function(arg1, arg2, options) {
+        return arg1 != arg2 ? options.fn(this) : options.inverse(this);
+    });
     instance.hb.registerHelper('ttype', function(arg1, options) {
         if (arg1 == 'text' || arg1 == 'email' || arg1 == 'tel' || arg1 == 'number' || arg1 == 'password') {
             return options.fn(this);

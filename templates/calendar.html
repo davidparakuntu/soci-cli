@@ -2,9 +2,9 @@
     <div class="calendar-header"></div>
     <div class="calendar-page">
         <div class="calendar-nav">
-            <div class="calendar-nav-left"></div>
-            <div class="calendar-nav-disp"></div>
-            <div class="calendar-nav-right"></div>
+            <div class="calendar-nav-left"><span class="previous-month">&lt;</span></div>
+            <div class="calendar-nav-disp">{{this.month}} {{this.year}}</div>
+            <div class="calendar-nav-right"><span class="next-month">&gt;</span></div>
         </div>
         <div class="calendar-month">
             <div class="calendar-week-header">
@@ -15,11 +15,12 @@
             {{#each this.weeks}}
             <div class="calendar-week">
                 {{#each this}}
-                {{#if this}}
+                {{#neq this 0}}
                 <span class="calendar-day">{{this}}</span>
-                {{else}}
+                {{/neq}}
+                {{#eq this 0}}
                 <span class="calendar-day"></span>
-                {{/if}}
+                {{/eq}}
                 {{/each}}
             </div>
             {{/each}}

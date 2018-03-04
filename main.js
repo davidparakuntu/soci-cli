@@ -10,6 +10,10 @@ exports.init = function(user) {
     instance.hb.registerHelper('eq', function(arg1, arg2, options) {
         return arg1 == arg2 ? options.fn(this) : options.inverse(this);
     });
+
+    instance.hb.registerHelper('neq', function(arg1, arg2, options) {
+        return arg1 != arg2 ? options.fn(this) : options.inverse(this);
+    });
     instance.hb.registerHelper('ttype', function(arg1, options) {
         if (arg1 == 'text' || arg1 == 'email' || arg1 == 'tel' || arg1 == 'number' || arg1 == 'password') {
             return options.fn(this);
@@ -395,6 +399,11 @@ module.exports = function() {
     }
 
     window.month = {
+        isLeapYear:function(year){
+            return year%4==0?"Yes":"No";
+        },
+        month:"April",
+        year:2018,
         weekDays: [{
             name: "Sunday",
             shortName: "Sun"
@@ -417,7 +426,7 @@ module.exports = function() {
             name: "Saturday",
             shortName: "Sat"
         }],
-        weeks: [[, , , 1, 2, 3, 4], [5, 9, 10, 11, 12, 13, 14], [15, 16, 17, 18, 19, 20, 21], [22, 23, 24, 25, 26, 27, 28], [29, 30, 31, 1, 2, 3, 4], [5, 6, 7, 8, 9, 10, 11]]
+        weeks: [[0,0,0,0,1,2,3], [5, 9, 10, 11, 12, 13, 14], [15, 16, 17, 18, 19, 20, 21], [22, 23, 24, 25, 26, 27, 28], [29, 30, 31, 1, 2, 3, 4], [5, 6, 7, 8, 9, 10, 11]]
     };
 
     window.showCalendar = function(parentNode) {

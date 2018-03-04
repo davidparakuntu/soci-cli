@@ -148,13 +148,20 @@
 }
 .calendar-nav-disp{
     width: 80%;
+    text-align: center;
 }
 .calendar-nav-left{
     width: 10%;
 }
 .calendar-nav-right{width: 10%;}
-.calendar-day-name{width: 14%;text-align: center;}
+.calendar-day-name{width: 14%;text-align: center;padding-top: 0%;}
 .calendar-day{
     width: 14%;
     text-align: center;
+    padding-top: 4%;
+}
+.selected-date{
+    border-radius:50%;
+    background-color:#0c9ea7;
+    color:white;
 }
