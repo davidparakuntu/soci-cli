@@ -44,6 +44,7 @@
     width: 100%;
     top: 10%;
 }
+
 .form-div {
     display: flex;
     flex-direction: row;
@@ -51,6 +52,7 @@
     width: 100%;
     top: 10%;
 }
+
 .register-logo {
     width: 29%;
     height: 76%;
@@ -71,6 +73,7 @@
     position: relative;
     padding-top: 5%;
 }
+
 .login-seperator {
     height: -4%;
 }
@@ -362,43 +365,46 @@
     }
 }
 
-
 /*********Content Loading******/
-.user-name-nav{
-    position:absolute;
-    left:10%;
+.user-name-nav {
+    position: absolute;
+    left: 10%;
     top: 13%;
 }
 
-input[type='rage']{
-    display:none;
+input[type='rage'] {
+    display: none;
 }
-input[type='rage']::-webkit-slider-runnable-track{
-    -webkit-appearance:none;
+
+input[type='rage']::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
 }
-.range-track{
-    height:5px;
-    width:90%;
+
+.range-track {
+    height: 3px;
+    width: 90%;
     background-color: lightgrey;
     position: absolute;
-    top:40%;
+    top: 40%;
     z-index: -2;
 }
 
-.range-thumb-outer{
-    height:32px;
-    width:32px;
-    border-radius:50%;
-    background-color: transparent;/* rgba(185, 18, 18, .5); */
-    top: -13px;
-    left: 1px;
+.range-thumb-outer {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    background-color: transparent;
+    /* rgba(185, 18, 18, .5); */
+    top: -14px;
+    left: -8px;
     position: relative;
     z-index: 10;
 }
-.range-thumb-inner{
-    height:16px;
-    width:16px;
-    border-radius:50%;
+
+.range-thumb-inner {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
     background-color: rgba(185, 18, 18, 0.9);
     position: absolute;
     top: 8px;
@@ -406,19 +412,30 @@ input[type='rage']::-webkit-slider-runnable-track{
     z-index: 3;
 }
 
-.range{
+.range {
     width: 100%;
-    height:50px;
-    background-color:transparent;
-    position:relative;
+    height: 50px;
+    background-color: transparent;
+    position: relative;
 }
 
-.track-fill{
-    height: 5px;
-    width: 23%;
-    background-color: rgba(185, 18, 18, .5);;
+.track-fill {
+    height: 3px;
+    width: 0%;
+    background-color: rgba(185, 18, 18, .5);
     position: absolute;
     z-index: -1;
     top: 40%;
     right: 1px;
     left: 0px;
+}
+
+.track-fill-anim {
+    transition-property: width;
+    transition-duration: 1s;
+}
+
+.thumb-anim {
+    transition-property: left;
+    transition-duration: 1s;
+}

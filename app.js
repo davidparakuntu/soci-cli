@@ -91,6 +91,13 @@ exports.init = function(user) {
         fetch(templateURL).then(function(response) {
             response.text().then(function(text) {
                 targetNode.innerHTML = instance.hb.compile(text)(object);
+                var rangeList = ec('range');
+                if (rangeList && rangeList.length > 0) {
+                    for (var i = 0; i < rangeList.length; i++) {
+                        activateRange(rangeList[i]);
+                    }
+                }
+
                 console.log('reading template success');
             }).then(function(msg) {
                 console.log(msg + " in succ");
@@ -106,6 +113,7 @@ exports.init = function(user) {
         })
 
     }
+
     instance.renderLogin = function() {
 
         fetch('templates/login.html').then(function(res) {
@@ -192,7 +200,7 @@ exports.init = function(user) {
                         }
                     }];
 
-                    window.app.showForm(formObj, actionMap, ei('app-content'));
+                    instance.showForm(formObj, actionMap, ei('app-content'));
 
                 });
             });
@@ -260,8 +268,8 @@ exports.init = function(user) {
         "type": "range",
         "name": "age",
         "label": "Age",
-        "min":"6",
-        "max":"70"
+        "min": "6",
+        "max": "70"
     }, {
         "type": "date",
         "name": "date-of-birth",
