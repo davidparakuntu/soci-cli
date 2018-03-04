@@ -379,20 +379,21 @@ input[type='rage']::-webkit-slider-runnable-track{
 .range-track{
     height:5px;
     width:90%;
-    background-color:grey;
+    background-color: lightgrey;
     position: absolute;
     top:40%;
-  
+    z-index: -2;
 }
 
 .range-thumb-outer{
     height:32px;
     width:32px;
     border-radius:50%;
-    background-color: rgba(185, 18, 18, .5);
+    background-color: transparent;/* rgba(185, 18, 18, .5); */
     top: -13px;
     left: 1px;
     position: relative;
+    z-index: 10;
 }
 .range-thumb-inner{
     height:16px;
@@ -402,11 +403,22 @@ input[type='rage']::-webkit-slider-runnable-track{
     position: absolute;
     top: 8px;
     left: 8px;
+    z-index: 3;
 }
 
 .range{
-    with:100%;
+    width: 100%;
     height:50px;
     background-color:transparent;
     position:relative;
 }
+
+.track-fill{
+    height: 5px;
+    width: 23%;
+    background-color: rgba(185, 18, 18, .5);;
+    position: absolute;
+    z-index: -1;
+    top: 40%;
+    right: 1px;
+    left: 0px;

@@ -14,7 +14,7 @@ module.exports = function(){
     var track = range.firstElementChild;
     var outerThumb = track.firstElementChild;
     var thump = outerThumb.firstElementChild;
-
+    var trackFill = range.lastElementChild;
     range.addEventListener('mousedown',function(e){
       var pageX = e.pageX;
       var outerX = parseInt(getComputedStyle(outerThumb).left,10);
@@ -28,6 +28,20 @@ module.exports = function(){
     });
     range.addEventListener('oncontextmenu',function(e){
       e.preventDefault();
+    })
+    range.addEventListener('touchstart',function(e){
+      outerThumb.style.backgroundColor="rgba(185, 18, 18, .5)";
+    })
+    range.addEventListener('touchmove',function(e){
+      var touch = e.touches[0];
+      var pageX = touch.pageX;
+      var outerX = parseInt(getComputedStyle(outerThumb).left,10);
+      var thumpX = pageX - outerX -8;
+      outerThumb.style.left=outerX+thumpX-16;
+      trackFill.style.width=outerX + 9;
+    })
+    range.addEventListener('touchend',function(e){
+      outerThumb.style.backgroundColor="transparent";
     })
     
   }
