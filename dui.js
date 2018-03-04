@@ -14,30 +14,51 @@ module.exports = function() {
         var outerThumb = track.firstElementChild;
         var thump = outerThumb.firstElementChild;
         var trackFill = range.lastElementChild;
+        var dragFlag = false;
         range.addEventListener('click', function(e) {
             outerThumb.style.backgroundColor = "rgba(185, 18, 18, .5)";
-            if(!trackFill.classList.contains('track-fill-anim')){
+            if (!trackFill.classList.contains('track-fill-anim')) {
                 trackFill.classList.add('track-fill-anim');
             }
-            if(!outerThumb.classList.contains('thumb-anim')){
+            if (!outerThumb.classList.contains('thumb-anim')) {
                 outerThumb.classList.add('thumb-anim');
             }
-            
-            var pageX = e.pageX;
+
+            var pageX = e.layerX;
             var outerX = parseInt(getComputedStyle(outerThumb).left, 10);
             var thumpX = pageX - outerX - 8;
             //thump.style.left=thumpX;
-            outerThumb.style.transision = "all 2s";
-            var newWidth = outerX + thumpX - 16;
+            var newWidth = outerX + thumpX - 8;
             outerThumb.style.left = newWidth;
             trackFill.style.width = newWidth + 9;
             outerThumb.style.backgroundColor = "transparent";
 
         });
+
         range.addEventListener('mouseup', function(e) {
-            //thump.style.left=e.offsetX;
             outerThumb.style.backgroundColor = "transparent";
+            dragFlag = false;
         });
+        range.addEventListener('mousedown', function(e) {
+            outerThumb.style.backgroundColor = "rgba(185, 18, 18, .5)";
+            dragFlag = true;
+        });
+        range.addEventListener('mousemove', function(e) {
+            if (trackFill.classList.contains('track-fill-anim')) {
+                trackFill.classList.remove('track-fill-anim');
+            }
+            if (outerThumb.classList.contains('thumb-anim')) {
+                outerThumb.classList.remove('thumb-anim');
+            }
+            if (dragFlag) {
+                var pageX = e.layerX;
+                var outerX = parseInt(getComputedStyle(outerThumb).left, 10);
+                var thumpX = pageX - outerX - 8;
+                outerThumb.style.left = outerX + thumpX - 16;
+                trackFill.style.width = outerX + 8;
+            }
+
+        })
         range.addEventListener('oncontextmenu', function(e) {
             e.preventDefault();
         })
@@ -45,14 +66,14 @@ module.exports = function() {
             outerThumb.style.backgroundColor = "rgba(185, 18, 18, .5)";
         })
         range.addEventListener('touchmove', function(e) {
-            if(trackFill.classList.contains('track-fill-anim')){
+            if (trackFill.classList.contains('track-fill-anim')) {
                 trackFill.classList.remove('track-fill-anim');
             }
-            if(outerThumb.classList.contains('thumb-anim')){
+            if (outerThumb.classList.contains('thumb-anim')) {
                 outerThumb.classList.remove('thumb-anim');
             }
             var touch = e.touches[0];
-            var pageX = touch.pageX;
+            var pageX = touch.pageX - touch.target.getBoundingClientRect().x;
             var outerX = parseInt(getComputedStyle(outerThumb).left, 10);
             var thumpX = pageX - outerX - 8;
             outerThumb.style.left = outerX + thumpX - 16;

@@ -5,7 +5,7 @@ exports.init = function(user) {
     var instance = {
         "user": user
     };
-    instance.hb = require('handlebars');
+    instance.hb = window.hb;
     instance.hb.registerHelper('eq', function(arg1, arg2, options) {
         return arg1 == arg2 ? options.fn(this) : options.inverse(this);
     });

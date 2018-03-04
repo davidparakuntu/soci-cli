@@ -4,7 +4,7 @@
             {{#ttype type}}
                 
         
-        <div class="field">
+        <div class="form-field">
             <input type="{{type}}" class="text-input" name="{{name}}" required tabindex="{{tabindex}}">
             <span class="highlight"></span>
             <span class="bar"></span>
@@ -12,10 +12,10 @@
         </div>
         {{/ttype}}
            
-            {{#eq type 'range'}}
+        {{#eq type 'range'}}
                 
         
-        <div class="field">
+        <div class="form-field">
            <!-- <input type="{{type}}" class="range-input" name="{{name}}" min="{{min}}" max="{{max}}" required tabindex="{{tabindex}}">
             <label class="label">{{label}}</label> -->
             <div class="range">
@@ -33,7 +33,7 @@
         {{#eq type 'date'}}
                 
         
-        <div class="field">
+        <div class="form-field">
             <input type="{{type}}" class="date-input" name="{{name}}" required tabindex="{{tabindex}}">
             <label class="label">{{label}}</label>
         </div>
@@ -41,7 +41,7 @@
         {{/each}}
         
         
-        <div class="register-action-panel">
+        <div class="form-action-panel">
             {{#each this.fields}}
                 {{#eq type 'action'}}
                     <span class="{{actionClass}} button" tabindex="{{tabindex}}">{{label}}</span>

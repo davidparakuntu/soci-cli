@@ -1,5 +1,4 @@
-var hb = require('handlebars');
-
+window.hb = require('handlebars');
 require('./dui.js')();
 window.App = require('./app.js');
 window.addEventListener('load', function(event) {
