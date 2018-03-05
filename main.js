@@ -805,10 +805,10 @@ module.exports = function() {
                 window.cal = showCalendar(ec('calendar-holder')[0]);
             });
             calButton.addEventListener('touchstart', function(event) {
-               window.cal= showCalendar(ec('calendar-holder')[0]);
+                window.cal = showCalendar(ec('calendar-holder')[0]);
             });
             calButton.addEventListener('mousedown', function(event) {
-                window.cal=showCalendar(ec('calendar-holder')[0]);
+                window.cal = showCalendar(ec('calendar-holder')[0]);
             });
         }
 
@@ -859,17 +859,24 @@ module.exports = function() {
             var templateURL = "templates/calendar-week.html";
             fetch(templateURL).then(function(response) {
                 response.text().then(function(text) {
-                    ec('calendar-month')[0].innerHTML = hb.compile(text)(window.month);
+                    var cm = ec('calendar-month')[0];
+                    cm.innerHTML="";
+                    cm.innerHTML = hb.compile(text)(window.month);
                 });
             });
         }
         calendar.showNextMonth = function() {
+            ec('month-days')[0].style.left = "-100%";
+            var templateURL = "templates/calendar-week.html";
+            fetch(templateURL).then(function(response) {
+                response.text().then(function(text) {
+                    ec('calendar-month')[0].innerHTML = hb.compile(text)(window.month);
+                });
+            });
         }
-        calendar.showPreviousMonth = function() {
-        }
+        calendar.showPreviousMonth = function() {}
 
-        calendar.getSelectedDate = function() {
-        }
+        calendar.getSelectedDate = function() {}
         return calendar;
 
     }

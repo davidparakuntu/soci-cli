@@ -1,22 +1,27 @@
-<div class="calendar-week-header">
-    {{#each this.weekDays}}
+<div class="month-days">
+    <div class="calendar-week-header">
+        {{#each this.weekDays}}
                 <span class="calendar-day-name">{{shortName}}</span>
+        {{/each}}
+
+
+    </div>
+    {{#each this.weeks}}
+
+
+
+    <div class="calendar-week">
+        {{#each this}}
+                {{#neq this 0}}
+                <span class="calendar-day">{{this}}</span>
+        {{/neq}}
+                {{#eq this 0}}
+                <span class="calendar-day"></span>
+        {{/eq}}
+                {{/each}}
+
+
+    </div>
     {{/each}}
 
 </div>
-{{#each this.weeks}}
-
-
-<div class="calendar-week">
-    {{#each this}}
-                {{#neq this 0}}
-                <span class="calendar-day">{{this}}</span>
-    {{/neq}}
-                {{#eq this 0}}
-                <span class="calendar-day"></span>
-    {{/eq}}
-                {{/each}}
-
-</div>
-{{/each}}
-
