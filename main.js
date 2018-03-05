@@ -447,7 +447,7 @@ module.exports = function() {
         m.weeks.push(firstWeek);
         var week = [];
         var l = 1;
-        for (var k = date.getDate(); (k <= lastDay.getDate()) && (month = date.getMonth()); k++) {
+        for (var k = date.getDate(); (k <= lastDay.getDate()) && (month == date.getMonth()); k++) {
             week.push(k);
             if (l % 7 == 0) {
                 m.weeks.push(week);
@@ -474,6 +474,30 @@ module.exports = function() {
                 ec('calendar-holder')[0].style.display = "block";
                 ec('calendar-cancel-button')[0].addEventListener('click', function() {
                     ec('calendar-holder')[0].style.display = "none";
+                });
+                calendar.cp = ec('calendar-page')[0];
+                calendar.cp.addEventListener('touchstart',function(event){
+                    calendar.touchStartTime=new Date();
+                    calendar.touchStartX = event.touches[0].pageX;
+                    calendar.touchMove= false;
+                });
+
+                calendar.cp.addEventListener('touchmove',function(event){
+                    calendar.touchMove= true;
+                    calendar.moveX = event.touches[0].pageX;
+                });
+
+                calendar.cp.addEventListener('touchend',function(event){
+                    let timeDiff = new Date() - calendar.touchStartTime;
+                    console.log(timeDiff);
+                    if(timeDiff < 900 && calendar.touchMove){
+                        if(calendar.moveX < calendar.touchStartX){
+                            console.log('swipe left')
+                            calendar.showNextMonth();
+                        }else if(calendar.moveX > calendar.touchStartX){
+                            console.log("swipe right")
+                        }
+                    }
                 });
             });
         });
