@@ -470,32 +470,33 @@ module.exports = function() {
         var templateURL = "templates/calendar.html";
         fetch(templateURL).then(function(response) {
             response.text().then(function(text) {
-                parentNode.innerHTML = hb.compile(text)(window.getMonth(calendar.currentMonth));
+                var obj = window.getMonth(calendar.currentMonth);
+                obj.left = "100%";
+                parentNode.innerHTML = hb.compile(text)(obj);
                 ec('calendar-holder')[0].style.display = "block";
                 ec('calendar-cancel-button')[0].addEventListener('click', function() {
                     ec('calendar-holder')[0].style.display = "none";
                 });
                 calendar.cp = ec('calendar-page')[0];
-                calendar.cp.addEventListener('touchstart',function(event){
-                    calendar.touchStartTime=new Date();
+                calendar.cp.addEventListener('touchstart', function(event) {
+                    calendar.touchStartTime = new Date();
                     calendar.touchStartX = event.touches[0].pageX;
-                    calendar.touchMove= false;
+                    calendar.touchMove = false;
                 });
 
-                calendar.cp.addEventListener('touchmove',function(event){
-                    calendar.touchMove= true;
+                calendar.cp.addEventListener('touchmove', function(event) {
+                    calendar.touchMove = true;
                     calendar.moveX = event.touches[0].pageX;
                 });
 
-                calendar.cp.addEventListener('touchend',function(event){
+                calendar.cp.addEventListener('touchend', function(event) {
                     let timeDiff = new Date() - calendar.touchStartTime;
                     console.log(timeDiff);
-                    if(timeDiff < 900 && calendar.touchMove){
-                        if(calendar.moveX < calendar.touchStartX){
-                            console.log('swipe left')
+                    if (timeDiff < 900 && calendar.touchMove) {
+                        if (calendar.moveX < calendar.touchStartX) {
                             calendar.showNextMonth();
-                        }else if(calendar.moveX > calendar.touchStartX){
-                            console.log("swipe right")
+                        } else if (calendar.moveX > calendar.touchStartX) {
+                            calendar.showPreviousMonth();
                         }
                     }
                 });
@@ -507,7 +508,9 @@ module.exports = function() {
                 response.text().then(function(text) {
                     var cm = ec('calendar-month')[0];
                     cm.innerHTML = "";
-                    cm.innerHTML = hb.compile(text)(window.getMonth(calendar.currentMonth));
+                    var obj = window.getMonth(calendar.currentMonth);
+                    obj.left = "100%";
+                    cm.innerHTML = hb.compile(text)(obj);
                     ec('month-days')[0].style.left = "1%";
                 });
             });
@@ -519,6 +522,7 @@ module.exports = function() {
                     var cm = ec('calendar-month')[0];
                     calendar.currentMonth.setMonth(calendar.currentMonth.getMonth() + 1);
                     var m = window.getMonth(calendar.currentMonth)
+                    m.left = "100%";
                     cm.insertAdjacentHTML('beforeend', hb.compile(text)(m));
                     ec('calendar-nav-disp')[0].innerHTML = m.month + ' ' + m.year;
                 }).then(function() {
@@ -537,7 +541,31 @@ module.exports = function() {
             });
 
         }
-        calendar.showPreviousMonth = function() {}
+        calendar.showPreviousMonth = function() {
+            var templateURL = "templates/calendar-week.html";
+            fetch(templateURL).then(function(response) {
+                response.text().then(function(text) {
+                    var cm = ec('calendar-month')[0];
+                    calendar.currentMonth.setMonth(calendar.currentMonth.getMonth() - 1);
+                    var m = window.getMonth(calendar.currentMonth)
+                    m.left = "-100%";
+                    cm.insertAdjacentHTML('beforeend', hb.compile(text)(m));
+                    ec('calendar-nav-disp')[0].innerHTML = m.month + ' ' + m.year;
+                }).then(function() {
+                    var allNodes = ec('month-days');
+                    if (allNodes.length == 3) {
+                        ec('calendar-month')[0].removeChild(allNodes[0]);
+                    }
+                    allNodes = ec('month-days');
+                    allNodes[0].style.left = "100%";
+                    setTimeout(function() {
+                        allNodes[1].style.left = "1%";
+                    }, 200);
+                }).catch(function(e) {
+                    console.log(e);
+                });
+            });
+        }
 
         calendar.getSelectedDate = function() {}
         return calendar;
