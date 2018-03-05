@@ -120,15 +120,17 @@ module.exports = function() {
 
                 calendar.cp.addEventListener('touchend', function(event) {
                     let timeDiff = new Date() - calendar.touchStartTime;
-                    console.log(timeDiff);
                     if (timeDiff < 900 && calendar.touchMove) {
                         if (calendar.moveX < calendar.touchStartX) {
                             calendar.showNextMonth();
                         } else if (calendar.moveX > calendar.touchStartX) {
                             calendar.showPreviousMonth();
+                        }else{
+                            event.target.classList.add('selected-date');
                         }
                     }
                 });
+
             });
         });
         calendar.showMonth = function() {

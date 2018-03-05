@@ -478,6 +478,7 @@ module.exports = function() {
                     ec('calendar-holder')[0].style.display = "none";
                 });
                 calendar.cp = ec('calendar-page')[0];
+                
                 calendar.cp.addEventListener('touchstart', function(event) {
                     calendar.touchStartTime = new Date();
                     calendar.touchStartX = event.touches[0].pageX;
@@ -491,15 +492,17 @@ module.exports = function() {
 
                 calendar.cp.addEventListener('touchend', function(event) {
                     let timeDiff = new Date() - calendar.touchStartTime;
-                    console.log(timeDiff);
                     if (timeDiff < 900 && calendar.touchMove) {
                         if (calendar.moveX < calendar.touchStartX) {
                             calendar.showNextMonth();
                         } else if (calendar.moveX > calendar.touchStartX) {
                             calendar.showPreviousMonth();
+                        }else{
+                            event.target.classList.add('selected-date');
                         }
                     }
                 });
+
             });
         });
         calendar.showMonth = function() {
