@@ -9,6 +9,8 @@ module.exports = function() {
         return document.getElementById(id);
     }
 
+    window.monthArray = [[0, 'January'], [1, 'February'], [2, 'March'], [3, 'April'], [4, 'May'], [5, 'June'], [6, 'July'], [7, 'August'], [8, 'September'], [9, 'October'], [10, 'November'], [11, 'December']];
+    window.monthMap = new Map(monthArray);
     window.activateCalendar = function(calButtons) {
         var inst = {};
         inst.calendar = ec('calendar')[0];
@@ -16,52 +18,88 @@ module.exports = function() {
             var calButton = calButtons[i];
             calButton.addEventListener('click', function(event) {
                 window.cal = showCalendar(ec('calendar-holder')[0]);
+                cal.showMonth();
             });
             calButton.addEventListener('touchstart', function(event) {
                 window.cal = showCalendar(ec('calendar-holder')[0]);
+                cal.showMonth();
             });
             calButton.addEventListener('mousedown', function(event) {
                 window.cal = showCalendar(ec('calendar-holder')[0]);
+                cal.showMonth();
             });
         }
 
     }
 
-    window.month = {
-        month: "April",
-        year: 2018,
-        weekDays: [{
-            name: "Sunday",
-            shortName: "Sun"
-        }, {
-            name: "Monday",
-            shortName: "Mon"
-        }, {
-            name: "Tuesday",
-            shortName: "Tue"
-        }, {
-            name: "Wednesday",
-            shortName: "Wed"
-        }, {
-            name: "Thursday",
-            shortName: "Thu"
-        }, {
-            name: "Friday",
-            shortName: "Fri"
-        }, {
-            name: "Saturday",
-            shortName: "Sat"
-        }],
-        weeks: [[0, 0, 0, 0, 1, 2, 3], [5, 9, 10, 11, 12, 13, 14], [15, 16, 17, 18, 19, 20, 21], [22, 23, 24, 25, 26, 27, 28], [29, 30, 31, 1, 2, 3, 4], [5, 6, 7, 8, 9, 10, 11]]
-    };
-
+    window.getMonth = function(date) {
+        date.setDate(1);
+        var lastDay = new Date(date.getFullYear(),date.getMonth() + 1,0);
+        var m = {
+            month: monthMap.get(date.getMonth()),
+            year: date.getFullYear(),
+            weekDays: [{
+                name: "Sunday",
+                shortName: "Sun"
+            }, {
+                name: "Monday",
+                shortName: "Mon"
+            }, {
+                name: "Tuesday",
+                shortName: "Tue"
+            }, {
+                name: "Wednesday",
+                shortName: "Wed"
+            }, {
+                name: "Thursday",
+                shortName: "Thu"
+            }, {
+                name: "Friday",
+                shortName: "Fri"
+            }, {
+                name: "Saturday",
+                shortName: "Sat"
+            }]
+        }
+        m.weeks = [];
+        var firstWeek = [];
+        for (var j = 0; j < date.getDay(); j++) {
+            firstWeek.push(0);
+        }
+        var firstDay = date.getDay();
+        for (var i = firstDay; i <= 6; i++) {
+            var d = date.getDate();
+            firstWeek.push(d);
+            date.setDate(d + 1);
+        }
+        var month = date.getMonth();
+        m.weeks.push(firstWeek);
+        var week = [];
+        var l = 1;
+        for (var k = date.getDate(); (k <= lastDay.getDate()) && (month = date.getMonth()); k++) {
+            week.push(k);
+            if (l % 7 == 0) {
+                m.weeks.push(week);
+                week = [];
+            }
+            l++;
+        }
+        if (week.length > 0) {
+            m.weeks.push(week);
+        }
+        for (var n = m.weeks.length; n < 6; n++) {
+            m.weeks.push([0, 0, 0, 0, 0, 0, 0]);
+        }
+        return m;
+    }
     window.showCalendar = function(parentNode) {
         var calendar = {};
+        calendar.currentMonth = new Date();
         calendar.parent = parentNode;
         var templateURL = "templates/calendar.html";
         fetch(templateURL).then(function(response) {
             response.text().then(function(text) {
-                parentNode.innerHTML = hb.compile(text)(window.month);
+                parentNode.innerHTML = hb.compile(text)(window.getMonth(calendar.currentMonth));
                 ec('calendar-holder')[0].style.display = "block";
                 ec('calendar-cancel-button')[0].addEventListener('click', function() {
                     ec('calendar-holder')[0].style.display = "none";
@@ -74,7 +112,7 @@ module.exports = function() {
                 response.text().then(function(text) {
                     var cm = ec('calendar-month')[0];
                     cm.innerHTML = "";
-                    cm.innerHTML = hb.compile(text)(window.month);
+                    cm.innerHTML = hb.compile(text)(window.getMonth(calendar.currentMonth));
                     ec('month-days')[0].style.left = "1%";
                 });
             });
@@ -84,9 +122,10 @@ module.exports = function() {
             fetch(templateURL).then(function(response) {
                 response.text().then(function(text) {
                     var cm = ec('calendar-month')[0];
-                    // ec('calendar-month')[0].innerHTML = "";
-                    // ec('calendar-month')[0].innerHTML = hb.compile(text)(window.month);
-                    cm.insertAdjacentHTML('beforeend', hb.compile(text)(window.month));
+                    calendar.currentMonth.setMonth(calendar.currentMonth.getMonth() + 1);
+                    var m = window.getMonth(calendar.currentMonth)
+                    cm.insertAdjacentHTML('beforeend', hb.compile(text)(m));
+                    ec('calendar-nav-disp')[0].innerHTML = m.month + ' ' + m.year;
                 }).then(function() {
                     var allNodes = ec('month-days');
                     if (allNodes.length == 3) {
@@ -94,7 +133,9 @@ module.exports = function() {
                     }
                     allNodes = ec('month-days');
                     allNodes[0].style.left = "-100%";
-                    setTimeout(function(){allNodes[1].style.left = "1%";},200);
+                    setTimeout(function() {
+                        allNodes[1].style.left = "1%";
+                    }, 200);
                 }).catch(function(e) {
                     console.log(e);
                 });

@@ -143,8 +143,8 @@
 }
 
 .calendar-footer {
-    height: 7%;
-    width: 90%;
+    height: 10%;
+    width: 100%;
     background-color: white;
     position: absolute;
     top: 90%;
@@ -152,6 +152,7 @@
     display: flex;
     flex-direction: row-reverse;
     right: 7%;
+    color: #0c9ea7;
 }
 
 .calendar-month {
@@ -220,12 +221,9 @@
     color: white;
 }
 
-.calendar-cancel-button {
-    padding-right: 20%;
-}
+.calendar-cancel-button {order: 2;margin: 10px;}
 
-.calendar-ok-button {
-}
+.calendar-ok-button {order: 1;margin: 10px;}
 
 .calendar-action {
     color: #0c9ea7;
