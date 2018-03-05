@@ -185,9 +185,10 @@
     width: 100%;
     height: 80%;
     top: 10%;
+    left: 100%;
     display: flex;
     transition-property: left;
-    transition-duration: .5s;
+    transition-duration: .3s;
     flex-direction: column;
     position: absolute;
 }

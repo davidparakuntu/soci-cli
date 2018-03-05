@@ -860,19 +860,33 @@ module.exports = function() {
             fetch(templateURL).then(function(response) {
                 response.text().then(function(text) {
                     var cm = ec('calendar-month')[0];
-                    cm.innerHTML="";
+                    cm.innerHTML = "";
                     cm.innerHTML = hb.compile(text)(window.month);
+                    ec('month-days')[0].style.left = "1%";
                 });
             });
         }
         calendar.showNextMonth = function() {
-            ec('month-days')[0].style.left = "-100%";
             var templateURL = "templates/calendar-week.html";
             fetch(templateURL).then(function(response) {
                 response.text().then(function(text) {
-                    ec('calendar-month')[0].innerHTML = hb.compile(text)(window.month);
+                    var cm = ec('calendar-month')[0];
+                    // ec('calendar-month')[0].innerHTML = "";
+                    // ec('calendar-month')[0].innerHTML = hb.compile(text)(window.month);
+                    cm.insertAdjacentHTML('beforeend', hb.compile(text)(window.month));
+                }).then(function() {
+                    var allNodes = ec('month-days');
+                    if (allNodes.length == 3) {
+                        ec('calendar-month')[0].removeChild(allNodes[0]);
+                    }
+                    allNodes = ec('month-days');
+                    allNodes[0].style.left = "-100%";
+                    setTimeout(function(){allNodes[1].style.left = "1%";},200);
+                }).catch(function(e) {
+                    console.log(e);
                 });
             });
+
         }
         calendar.showPreviousMonth = function() {}
 
