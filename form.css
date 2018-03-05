@@ -221,15 +221,15 @@
 }
 
 .calendar-cancel-button {
-    padding-right: 5px;
+    padding-right: 20%;
 }
 
 .calendar-ok-button {
 }
 
 .calendar-action {
-    display: flex;
     color: #0c9ea7;
     font-size: 18;
     font-weight: bold;
+    width: 34%;
 }
