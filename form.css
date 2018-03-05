@@ -103,10 +103,9 @@
     height: 80%;
     top: 5%;
     bottom: 10%;
-    /* background-color: grey; */
     z-index: 10;
     box-shadow: 8px 20px 20px 10px rgba(202, 199, 199, 0.91);
-    /* top: 1; */
+    overflow: hidden;
 }
 .calendar-header{
     height:20%;
@@ -114,25 +113,49 @@
 }
 .calendar-nav{
     height:10%;
+    width: 100%;
     display:flex;
     flex-direction:row;
+    position: absolute;
     background-color: white;
+    order: 1;
 }
 .calendar-page{
     height: 80%;
-    background-color: white;
+    width: 100%;
     display: flex;
     flex-direction: column;
+    transition-property: left; */
+    /* transition-duration: .5s; */
+    flex-direction: column;
+    transition-duration: 1s;
+    position: relative;
+    overflow: hidden;
 }
+
 .calendar-footer{
     height:10%;
+    width: 100%;
     background-color: white;
+    position: absolute;
+    top: 90%;
+    order: 3;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .calendar-month{
+    width: 100%;
     height: 80%;
+    /* top: 10%; */
     display:flex;
+    transition-property:left;
+    transition-duration:.5s;
     flex-direction:column;
+    position: absolute;
+    bottom: 10%;
+    overflow: hidden;
+    order: 2;
 }
 .calendar-week{
     display:flex;
@@ -144,7 +167,6 @@
     display:flex;
     flex-direction:row;
     height: 14%;
-    /* width: 14%; */
 }
 .calendar-nav-disp{
     width: 80%;
@@ -152,8 +174,9 @@
 }
 .calendar-nav-left{
     width: 10%;
+    text-align:  center;
 }
-.calendar-nav-right{width: 10%;}
+.calendar-nav-right{width: 10%;text-align: center;}
 .calendar-day-name{width: 14%;text-align: center;padding-top: 0%;}
 .calendar-day{
     width: 14%;
@@ -164,4 +187,19 @@
     border-radius:50%;
     background-color:#0c9ea7;
     color:white;
+}
+
+.calendar-cancel-button{
+padding-right: 5px;
+}
+.calendar-ok-button{
+    
+}
+
+.calendar-action{
+    display: flex;
+    color: #0c9ea7;
+    font-size: 18;
+    font-weight: bold;
+    padding-right: 23px;
 }

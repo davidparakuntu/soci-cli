@@ -1,30 +1,26 @@
 <div class="calendar">
     <div class="calendar-header"></div>
+    <!-- Current Page-->
     <div class="calendar-page">
         <div class="calendar-nav">
-            <div class="calendar-nav-left"><span class="previous-month">&lt;</span></div>
+            <div class="calendar-nav-left">
+                <span class="previous-month">&lt;</span>
+            </div>
             <div class="calendar-nav-disp">{{this.month}} {{this.year}}</div>
-            <div class="calendar-nav-right"><span class="next-month">&gt;</span></div>
+            <div class="calendar-nav-right">
+                <span class="next-month">&gt;</span>
+            </div>
         </div>
         <div class="calendar-month">
-            <div class="calendar-week-header">
-                {{#each this.weekDays}}
-                <span class="calendar-day-name">{{shortName}}</span>
-                {{/each}}
-            </div>
-            {{#each this.weeks}}
-            <div class="calendar-week">
-                {{#each this}}
-                {{#neq this 0}}
-                <span class="calendar-day">{{this}}</span>
-                {{/neq}}
-                {{#eq this 0}}
-                <span class="calendar-day"></span>
-                {{/eq}}
-                {{/each}}
-            </div>
-            {{/each}}
+           
+    
+
         </div>
-        <div class="calendar-footer"></div>
+        <div class="calendar-footer">
+            <div class="calendar-action">
+                <span class="calendar-cancel-button">CANCEL</span>
+                <span class="calendar-ok-button">OK</span>
+            </div>
+        </div>
     </div>
 </div>

@@ -15,21 +15,21 @@ module.exports = function() {
         for (var i = 0; i < calButtons.length; i++) {
             var calButton = calButtons[i];
             calButton.addEventListener('click', function(event) {
-                showCalendar(ec('calendar-holder')[0]);
+                window.cal = showCalendar(ec('calendar-holder')[0]);
             });
             calButton.addEventListener('touchstart', function(event) {
-                showCalendar(ec('calendar-holder')[0]);
+               window.cal= showCalendar(ec('calendar-holder')[0]);
             });
             calButton.addEventListener('mousedown', function(event) {
-                showCalendar(ec('calendar-holder')[0]);
+                window.cal=showCalendar(ec('calendar-holder')[0]);
             });
         }
 
     }
 
     window.month = {
-        month:"April",
-        year:2018,
+        month: "April",
+        year: 2018,
         weekDays: [{
             name: "Sunday",
             shortName: "Sun"
@@ -52,17 +52,39 @@ module.exports = function() {
             name: "Saturday",
             shortName: "Sat"
         }],
-        weeks: [[0,0,0,0,1,2,3], [5, 9, 10, 11, 12, 13, 14], [15, 16, 17, 18, 19, 20, 21], [22, 23, 24, 25, 26, 27, 28], [29, 30, 31, 1, 2, 3, 4], [5, 6, 7, 8, 9, 10, 11]]
+        weeks: [[0, 0, 0, 0, 1, 2, 3], [5, 9, 10, 11, 12, 13, 14], [15, 16, 17, 18, 19, 20, 21], [22, 23, 24, 25, 26, 27, 28], [29, 30, 31, 1, 2, 3, 4], [5, 6, 7, 8, 9, 10, 11]]
     };
 
     window.showCalendar = function(parentNode) {
+        var calendar = {};
+        calendar.parent = parentNode;
         var templateURL = "templates/calendar.html";
         fetch(templateURL).then(function(response) {
             response.text().then(function(text) {
                 parentNode.innerHTML = hb.compile(text)(window.month);
                 ec('calendar-holder')[0].style.display = "block";
+                ec('calendar-cancel-button')[0].addEventListener('click', function() {
+                    ec('calendar-holder')[0].style.display = "none";
+                });
             });
         });
+        calendar.showMonth = function() {
+            var templateURL = "templates/calendar-week.html";
+            fetch(templateURL).then(function(response) {
+                response.text().then(function(text) {
+                    ec('calendar-month')[0].innerHTML = hb.compile(text)(window.month);
+                });
+            });
+        }
+        calendar.showNextMonth = function() {
+            
+        }
+        calendar.showPreviousMonth = function() {
+        }
+
+        calendar.getSelectedDate = function() {
+        }
+        return calendar;
 
     }
 
