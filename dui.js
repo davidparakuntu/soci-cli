@@ -20,15 +20,15 @@ module.exports = function() {
         for (var i = 0; i < calButtons.length; i++) {
             var calButton = calButtons[i];
             calButton.addEventListener('click', function(event) {
-                window.cal = showCalendar(ec('calendar-holder')[0]);
+                window.cal = showCalendar(ec('calendar-holder')[0], calButton);
                 cal.showMonth();
             });
             calButton.addEventListener('touchstart', function(event) {
-                window.cal = showCalendar(ec('calendar-holder')[0]);
+                window.cal = showCalendar(ec('calendar-holder')[0], calButton);
                 cal.showMonth();
             });
             calButton.addEventListener('mousedown', function(event) {
-                window.cal = showCalendar(ec('calendar-holder')[0]);
+                window.cal = showCalendar(ec('calendar-holder')[0], calButton);
                 cal.showMonth();
             });
         }
@@ -96,7 +96,7 @@ module.exports = function() {
         }
         return m;
     }
-    window.showCalendar = function(parentNode) {
+    window.showCalendar = function(parentNode, targetNode) {
         var calendar = {};
         calendar.currentMonth = new Date();
         calendar.selectedDate = new Date();
@@ -104,12 +104,17 @@ module.exports = function() {
         var templateURL = "templates/calendar.html";
         fetch(templateURL).then(function(response) {
             response.text().then(function(text) {
-                var obj = window.getMonth(calendar.currentMonth);
+                var obj = {};
+                //window.getMonth(calendar.currentMonth);
                 obj.left = "100%";
                 parentNode.innerHTML = hb.compile(text)(obj);
                 ec('calendar-holder')[0].style.display = "block";
                 ec('calendar-cancel-button')[0].addEventListener('click', function() {
                     ec('calendar-holder')[0].style.display = "none";
+                });
+                ec('calendar-ok-button')[0].addEventListener('click', function() {
+                    ec('calendar-holder')[0].style.display = "none";
+                    targetNode.value = calendar.selectedDate;
                 });
                 calendar.cp = ec('calendar-page')[0];
                 calendar.cp.addEventListener('touchstart', function(event) {
@@ -146,9 +151,9 @@ module.exports = function() {
 
                             ec('selected-year')[0].innerText = "";
                             ec('selected-day-date-month')[0].innerText = "";
-                            
+
                             ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
-                            ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0,3) + ", " + monthMap.get(calendar.selectedDate.getMonth()) + " " + calendar.selectedDate.getDate()
+                            ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0,3) + " " + calendar.selectedDate.getDate()
                         }
 
                     }
@@ -167,9 +172,20 @@ module.exports = function() {
                     cm.innerHTML = hb.compile(text)(obj);
                     ec('month-days')[0].style.left = "1%";
                     ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
-                    ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0,3) + ", " + monthMap.get(calendar.selectedDate.getMonth()) + " " + calendar.selectedDate.getDate()
+                    ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0,3) + " " + calendar.selectedDate.getDate()
                 });
             });
+            var monthDispTemplate = "templates/month-disp.html";
+            fetch(monthDispTemplate).then(function(response) {
+                response.text().then(function(text) {
+                    var cnd = ec('calendar-nav-disp')[0];
+                    cnd.innerHTML = "";
+                    var obj = {"month":monthMap.get(calendar.currentMonth.getMonth()),"year":calendar.currentMonth.getFullYear()};
+                    obj.left = "0%";
+                    cnd.innerHTML = hb.compile(text)(obj);
+                });
+            });
+
         }
         calendar.showNextMonth = function() {
             var templateURL = "templates/calendar-week.html";
@@ -180,7 +196,6 @@ module.exports = function() {
                     var m = window.getMonth(calendar.currentMonth)
                     m.left = "100%";
                     cm.insertAdjacentHTML('beforeend', hb.compile(text)(m));
-                    ec('calendar-nav-disp')[0].innerHTML = m.month + ' ' + m.year;
                 }).then(function() {
                     var allNodes = ec('month-days');
                     if (allNodes.length == 3) {
@@ -196,6 +211,18 @@ module.exports = function() {
                 });
             });
 
+            var monthDispTemplate = "templates/month-disp.html";
+            fetch(monthDispTemplate).then(function(response) {
+                response.text().then(function(text) {
+                    var cnd = ec('calendar-nav-disp')[0];
+                    cnd.innerHTML = "";
+                    var obj = {"month":monthMap.get(calendar.currentMonth.getMonth()),"year":calendar.currentMonth.getFullYear()};
+                    obj.left = "120%";
+                    cnd.innerHTML = hb.compile(text)(obj);
+                    setTimeout(function(){ec('month-disp')[0].style.left="0%";},200);
+                });
+            });
+
         }
         calendar.showPreviousMonth = function() {
             var templateURL = "templates/calendar-week.html";
@@ -206,7 +233,6 @@ module.exports = function() {
                     var m = window.getMonth(calendar.currentMonth)
                     m.left = "-100%";
                     cm.insertAdjacentHTML('beforeend', hb.compile(text)(m));
-                    ec('calendar-nav-disp')[0].innerHTML = m.month + ' ' + m.year;
                 }).then(function() {
                     var allNodes = ec('month-days');
                     if (allNodes.length == 3) {
@@ -219,6 +245,18 @@ module.exports = function() {
                     }, 200);
                 }).catch(function(e) {
                     console.log(e);
+                });
+            });
+
+            var monthDispTemplate = "templates/month-disp.html";
+            fetch(monthDispTemplate).then(function(response) {
+                response.text().then(function(text) {
+                    var cnd = ec('calendar-nav-disp')[0];
+                    cnd.innerHTML = "";
+                    var obj = {"month":monthMap.get(calendar.currentMonth.getMonth()),"year":calendar.currentMonth.getFullYear()};
+                    obj.left = "-120%";
+                    cnd.innerHTML = hb.compile(text)(obj);
+                    setTimeout(function(){ec('month-disp')[0].style.left="0%";},200);
                 });
             });
         }

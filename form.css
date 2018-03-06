@@ -119,12 +119,10 @@
 }
 
 .calendar-nav {
-    /* top: 2%; */
-    height: 10%;
     width: 100%;
     display: flex;
     flex-direction: row;
-    position: absolute;
+    position: relative;
     background-color: white;
     order: 1;
     padding: 2%;
@@ -179,11 +177,14 @@
 }
 
 .calendar-nav-disp {
-    width: 80%;
+    width: 70%;
     text-align: center;
     top: 2%;
+    position: relative;
+    order: 2;
 }
-.month-days{
+
+.month-days {
     width: 100%;
     height: 80%;
     top: 10%;
@@ -194,14 +195,18 @@
     flex-direction: column;
     position: absolute;
 }
+
 .calendar-nav-left {
     width: 10%;
     text-align: center;
+    order: 1;
 }
 
 .calendar-nav-right {
     width: 10%;
     text-align: center;
+    order: 3;
+    position: relative;
 }
 
 .calendar-day-name {
@@ -222,9 +227,15 @@
     color: white;
 }
 
-.calendar-cancel-button {order: 2;margin: 10px;}
+.calendar-cancel-button {
+    order: 2;
+    margin: 10px;
+}
 
-.calendar-ok-button {order: 1;margin: 10px;}
+.calendar-ok-button {
+    order: 1;
+    margin: 10px;
+}
 
 .calendar-action {
     color: #0c9ea7;
@@ -233,18 +244,20 @@
     width: 34%;
 }
 
-.selected-year{
-padding-top: 2%;
-font-size: 24;
-float: left;
-clear: left;
-padding-left: 3%;
+.selected-year {
+    padding-top: 2%;
+    font-size: 24;
+    float: left;
+    clear: left;
+    padding-left: 3%;
 }
 
-.selected-day-date-month{
-    padding-top: 2%;
-    float: left;
-    clear: left;
-    font-size: 50;
-    padding-left: 2%;
+.selected-day-date-month {
+    padding-top: 2%;
+    float: left;
+    clear: left;
+    font-size: 50;
+    padding-left: 2%;
 }
+
+.month-disp{position: absolute;width: 100%;transition-property:  left;transition-duration:  .3s;}

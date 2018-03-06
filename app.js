@@ -102,7 +102,7 @@ exports.init = function(user) {
                     }
                 }
 
-                activateCalendar(ec('calendar-button'));
+                activateCalendar(ec('calendar-trigger'));
                 console.log('reading template success');
             }).then(function(msg) {
                 console.log(msg + " in succ");
