@@ -115,6 +115,7 @@
 .calendar-header {
     height: 20%;
     background-color: #0c9ea7;
+    color: white;
 }
 
 .calendar-nav {
@@ -230,4 +231,20 @@
     font-size: 18;
     font-weight: bold;
     width: 34%;
+}
+
+.selected-year{
+padding-top: 2%;
+font-size: 24;
+float: left;
+clear: left;
+padding-left: 3%;
+}
+
+.selected-day-date-month{
+    padding-top: 2%;
+    float: left;
+    clear: left;
+    font-size: 50;
+    padding-left: 2%;
 }

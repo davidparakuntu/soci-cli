@@ -798,6 +798,9 @@ module.exports = function() {
 
     window.monthArray = [[0, 'January'], [1, 'February'], [2, 'March'], [3, 'April'], [4, 'May'], [5, 'June'], [6, 'July'], [7, 'August'], [8, 'September'], [9, 'October'], [10, 'November'], [11, 'December']];
     window.monthMap = new Map(monthArray);
+    window.dayArray = [[0, "Sunday"], [1, "Monday"], [2, "Tuesday"], [3, "Wednesday"], [4, "Thursday"], [5, "Friday"], [6, "Saturday"]];
+    window.dayMap = new Map(dayArray);
+
     window.activateCalendar = function(calButtons) {
         var inst = {};
         inst.calendar = ec('calendar')[0];
@@ -823,6 +826,7 @@ module.exports = function() {
         date.setDate(1);
         var lastDay = new Date(date.getFullYear(),date.getMonth() + 1,0);
         var m = {
+            day: dayMap.get(date.getDay()),
             month: monthMap.get(date.getMonth()),
             year: date.getFullYear(),
             weekDays: [{
@@ -882,6 +886,7 @@ module.exports = function() {
     window.showCalendar = function(parentNode) {
         var calendar = {};
         calendar.currentMonth = new Date();
+        calendar.selectedDate = new Date();
         calendar.parent = parentNode;
         var templateURL = "templates/calendar.html";
         fetch(templateURL).then(function(response) {
@@ -921,8 +926,16 @@ module.exports = function() {
                             for (var i = 0; i < selected.length; i++) {
                                 selected[0].classList.remove('selected-date')
                             }
-
                             event.target.classList.add('selected-date');
+                            calendar.selectedDate.setDate(event.target.innerText);
+                            calendar.selectedDate.setFullYear(calendar.currentMonth.getFullYear());
+                            calendar.selectedDate.setMonth(calendar.currentMonth.getMonth());
+
+                            ec('selected-year')[0].innerText = "";
+                            ec('selected-day-date-month')[0].innerText = "";
+                            
+                            ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
+                            ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0,3) + ", " + monthMap.get(calendar.selectedDate.getMonth()) + " " + calendar.selectedDate.getDate()
                         }
 
                     }
@@ -940,6 +953,8 @@ module.exports = function() {
                     obj.left = "100%";
                     cm.innerHTML = hb.compile(text)(obj);
                     ec('month-days')[0].style.left = "1%";
+                    ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
+                    ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0,3) + ", " + monthMap.get(calendar.selectedDate.getMonth()) + " " + calendar.selectedDate.getDate()
                 });
             });
         }
