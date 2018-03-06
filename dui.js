@@ -125,9 +125,19 @@ module.exports = function() {
                             calendar.showNextMonth();
                         } else if (calendar.moveX > calendar.touchStartX) {
                             calendar.showPreviousMonth();
-                        }else{
+                        } else {
+                            console.log('something wrong!!');
+                        }
+                    } else if (timeDiff < 500) {
+                        if (event.target.classList.contains('calendar-day')) {
+                            var selected = ec('selected-date');
+                            for (var i = 0; i < selected.length; i++) {
+                                selected[0].classList.remove('selected-date')
+                            }
+
                             event.target.classList.add('selected-date');
                         }
+
                     }
                 });
 
