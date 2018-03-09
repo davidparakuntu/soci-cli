@@ -125,6 +125,8 @@
     border-bottom: 1px solid black;
     width: 90%;
     cursor: pointer;
+    z-index: -15;
+    position: relative;
 }
 
 .text-input:focus {
@@ -141,6 +143,7 @@
     font-weight: normal;
     color: #999;
     pointer-events: none;
+    z-index: -1;
 }
 
 .text-input:focus ~ .label,input:valid ~ .label {
@@ -156,6 +159,7 @@
     left: 50%;
     right: 50%;
     height: 2px;
+    z-index: -1;
 }
 
 .text-input:focus ~ .bar,input:valid ~ .bar, .text-input:hover ~ .bar {

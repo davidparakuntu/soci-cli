@@ -1,10 +1,10 @@
 <div class="calendar-holder"></div>
 <div class="form-div">
     <div class="form-fields">
-       
         {{#each this.fields}}
             {{#ttype type}}
              
+        
         
         <div class="form-field">
             <input type="{{type}}" class="text-input" name="{{name}}" required tabindex="{{tabindex}}">
@@ -17,7 +17,8 @@
         {{#eq type 'range'}}
                 
          
-        <div class="form-field">
+        
+        <div class="range-holder">
             <!-- <input type="{{type}}" class="range-input" name="{{name}}" min="{{min}}" max="{{max}}" required tabindex="{{tabindex}}">
             <label class="label">{{label}}</label> -->
             <div class="range">
@@ -33,9 +34,13 @@
         {{/eq}}
 
         {{#eq type 'date'}}
+        
+        <div class="form-field">
             <input type="text" class="calendar-trigger">
+        </div>
         {{/eq}}
         {{/each}}
+        
         
         
         
@@ -47,6 +52,7 @@
             {{/eq}}   
             {{/each}}
 
+        
         
         
         
