@@ -415,25 +415,25 @@ module.exports = function() {
             year: date.getFullYear(),
             weekDays: [{
                 name: "Sunday",
-                shortName: "Sun"
+                shortName: "S"
             }, {
                 name: "Monday",
-                shortName: "Mon"
+                shortName: "M"
             }, {
                 name: "Tuesday",
-                shortName: "Tue"
+                shortName: "T"
             }, {
                 name: "Wednesday",
-                shortName: "Wed"
+                shortName: "W"
             }, {
                 name: "Thursday",
-                shortName: "Thu"
+                shortName: "T"
             }, {
                 name: "Friday",
-                shortName: "Fri"
+                shortName: "F"
             }, {
                 name: "Saturday",
-                shortName: "Sat"
+                shortName: "S"
             }]
         }
         m.weeks = [];
