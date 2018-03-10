@@ -97,7 +97,7 @@
     position: absolute;
     height: 100%;
     display: none;
-    width: 100%;
+    width: 80%;
     z-index: 5;
 }
 
@@ -108,7 +108,7 @@
     float: left;
     left: 5%;
     right: 5%;
-    width: 90%;
+    width: 100%;
     height: 80%;
     top: 5%;
     bottom: 10%;
@@ -121,6 +121,7 @@
     height: 20%;
     background-color: #0c9ea7;
     color: white;
+    width: 100%;
 }
 
 .calendar-nav {
@@ -136,6 +137,7 @@
 .calendar-page {
     height: 80%;
     width: 100%;
+    left: 0%;
     display: flex;
     flex-direction: column;
     transition-property: left;
@@ -147,6 +149,7 @@
     overflow: hidden;
     background: white;
     z-index: 7;
+    /* right: 1%; */
 }
 
 .calendar-footer {
@@ -163,13 +166,15 @@
 }
 
 .calendar-month {
-    width: 100%;
+    width: 90%;
     height: 80%;
     top: 10%;
     position: absolute;
     bottom: 10%;
     order: 2;
     z-index: 8;
+    left: 2%;
+    /* padding-right: 1%; */
 }
 
 .calendar-week {
@@ -229,8 +234,9 @@
 
 .calendar-day {
     width: 14%;
+    /* height: 98%; */
     text-align: center;
-    padding-top: 3%;
+    padding: 2% 1% 1% 1%;
     z-index: 11;
 }
 
@@ -281,6 +287,6 @@
 }
 
 .calendar-trigger{
-    box-shadow: inset 1px 1px;
+    box-shadow: 2px 2px 1px 1px;
     top: 10%;
     width: 90%;

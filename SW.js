@@ -49,7 +49,7 @@ self.addEventListener('activate', function(event) {
     event.waitUntil(function() {
         caches.open("dd1").then(function(cache) {
             console.log('installing cache');
-            return cache.addAll(['images/gate-large.png', 'images/gate-medium.png', 'images/gate-small.png', 'images/gate.png', 'images/register-large.png', 'images/register-medium.png', 'images/register-small.png', 'images/register-small.png', 'images/register.png', 'templates/home.html', 'templates/login.html', 'templates/register.html', 'templates/test.hbs', 'index.html', 'main.js', 'myweb.css','/']).then(function() {
+            return cache.addAll(['images/gate-large.png', 'images/gate-medium.png', 'images/gate-small.png', 'images/gate.png', 'images/register-large.png', 'images/register-medium.png', 'images/register-small.png', 'images/register-small.png', 'images/register.png', 'templates/home.html', 'templates/login.html', 'templates/register.html', 'templates/form.html','templates/calendar.html','templates/calendar-week.html','templates/month-disp.html', 'index.html', 'main.js', 'myweb.css','form.css','meterial.css','/']).then(function() {
                 console.log('Successfully cached..')
             }).catch(function() {
                 console.log('Cache failed');
