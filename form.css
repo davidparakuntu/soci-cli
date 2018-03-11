@@ -278,9 +278,9 @@
     }
 
     .year-button {
-    position: relative;
-    top: 24%;
-    font-size: 9px;
+        position: relative;
+        top: 24%;
+        font-size: 9px;
     }
 
     .selected-day-date-month {
@@ -296,6 +296,19 @@
         width: 100%;
         transition-property: left;
         transition-duration: .3s;
+    }
+
+    .year-browser {
+        position: absolute;
+        height: 77%;
+        width: 95%;
+        top: 6%;
+        left: 7%;
+        background-color: #f9f9f9;
+        z-index: 50;
+        box-shadow: 4px 3px 19px 1px black;
+        flex-direction: column;
+        display: none;
     }
 }
 
@@ -323,7 +336,7 @@
         color: white;
         width: 40%;
         padding-left: 2%;
-        positionL:relative;
+        positionL: relative;
     }
 
     .calendar-nav {
@@ -499,6 +512,20 @@
         transition-property: left;
         transition-duration: .3s;
     }
+
+    .year-browser {
+        position: absolute;
+        height: 80%;
+        width: 99%;
+        top: 6%;
+        left: 7%;
+        background-color: #f9f9f9;
+        z-index: 50;
+        box-shadow: 4px 3px 19px 1px black;
+        flex-direction: column;
+        display: none;
+        padding: 1%;
+    }
 }
 
 @media screen and (min-width: 798px) {
@@ -516,14 +543,19 @@
     top: 10%;
     width: 90%;
 }
-.year-browser{
-    position: absolute;
-    height: 46%;
-    width: 65%;
-    top: 6%;
-    left: 7%;
-    background-color: #f9f9f9;
-    z-index: 50;
-    box-shadow: 4px 3px 19px 1px black;
-    display: none;
+
+.years-row {
+    display: flex;
+    height: 5%;
+    flex-direction: row;
+    position: relative;
+    left: 1%;
+    right: 1%;
+}
+
+.year-column {
+    width: 10%;
+    box-shadow: 0.1px 0.5px 1px 0px;
+    text-align: center;
+    padding-top: 1%;
 }

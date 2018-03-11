@@ -123,21 +123,25 @@ module.exports = function() {
                     calendar.touchMove = false;
                 });
 
-                calendar.years = function(){
+                ec('calendar-header')[0].addEventListener('click', function() {
+                    calendar.showYearBrowser();
+                });
+                calendar.years = function() {
                     var years = [];
                     var currentYear = 1900;
-                    for(let i=0;i<10;i++){
+                    for (let i = 0; i < 20; i++) {
                         var row = [];
-                        for(let j = 0; j<20; j++){
-                            row[j]=currentYear;
+                        for (let j = 0; j < 10; j++) {
+                            row[j] = currentYear;
                             currentYear++;
                         }
                         years.push(row);
                     }
                     var obj = {};
-                    obj.years=years;
+                    obj.years = years;
                     return obj;
-                };
+                }
+                ;
                 calendar.cp.addEventListener('touchmove', function(event) {
                     calendar.touchMove = true;
                     calendar.moveX = event.touches[0].pageX;
@@ -211,18 +215,26 @@ module.exports = function() {
             });
 
         }
-        calendar.showYearBrowser= function(){
-            ec('year-browser')[0].style.display="flex";
+        calendar.showYearBrowser = function() {
+             ec('year-browser')[0].style.display="flex";
             var templateURL = "templates/years.html";
             fetch(templateURL).then(function(response){
                 response.text().then(function(text){
                     ec('year-browser')[0].innerHTML=hb.compile(text)(calendar.years());
                 });
+            }).then(function(){
+                ec('year-browser')[0].addEventListener('click',function(event){
+                    var selectedYear = event.target.innerText;
+                    calendar.currentMonth.setYear(selectedYear);
+                    calendar.selectedDate.setYear(selectedYear);
+                    calendar.showMonth();
+                    ec('year-browser')[0].style.display="none";
+                });
             });
-            
+
         }
-        calendar.closeYearBrowser= function(){
-            ec('year-browser')[0].style.display="none";
+        calendar.closeYearBrowser = function() {
+            ec('year-browser')[0].style.display = "none";
         }
         calendar.showNextMonth = function() {
             var templateURL = "templates/calendar-week.html";
