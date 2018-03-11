@@ -494,6 +494,21 @@ module.exports = function() {
                     calendar.touchMove = false;
                 });
 
+                calendar.years = function(){
+                    var years = [];
+                    var currentYear = 1900;
+                    for(let i=0;i<10;i++){
+                        var row = [];
+                        for(let j = 0; j<20; j++){
+                            row[j]=currentYear;
+                            currentYear++;
+                        }
+                        years.push(row);
+                    }
+                    var obj = {};
+                    obj.years=years;
+                    return obj;
+                };
                 calendar.cp.addEventListener('touchmove', function(event) {
                     calendar.touchMove = true;
                     calendar.moveX = event.touches[0].pageX;
@@ -566,6 +581,19 @@ module.exports = function() {
                 });
             });
 
+        }
+        calendar.showYearBrowser= function(){
+            ec('year-browser')[0].style.display="flex";
+            var templateURL = "templates/years.html";
+            fetch(templateURL).then(function(response){
+                response.text().then(function(text){
+                    ec('year-browser')[0].innerHTML=hb.compile(text)(calendar.years());
+                });
+            });
+            
+        }
+        calendar.closeYearBrowser= function(){
+            ec('year-browser')[0].style.display="none";
         }
         calendar.showNextMonth = function() {
             var templateURL = "templates/calendar-week.html";

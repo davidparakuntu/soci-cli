@@ -96,17 +96,6 @@
 }
 
 .button {
-    width: 40%;
-    height: 10%;
-    text-align: center;
-    left: 34px;
-    background-color: rgb(136,92,32);
-    cursor: pointer;
-    margin: 5px;
-    padding-top: 5px;
-    border-bottom: 2px solid lightgrey;
-    border-left: 2px solid lightgrey;
-    position: relative;
     color: white;
 }
 
@@ -177,23 +166,18 @@
     /* margin-left: 2%; */
 }
 
-.button:active ~ .button {
-    background-color: black%;
-    transition: .7s ease all;
+.button:active {
+    box-shadow: 1px 1px 1px 1px rgb(204,204,204);
 }
 
 .button {
-    width: 100px;
+    width: 91px;
     height: 25px;
     text-align: center;
-    left: 0px;
     background-color: rgb(136,92,32);
     cursor: pointer;
-    margin: 5px;
-    padding-top: 5px;
-    border-bottom: 2px solid lightgrey;
-    border-left: 2px solid lightgrey;
-    position: relative;
+    padding-top: 4px;
+    box-shadow: 2px 1px 3px 1px black;
 }
 
 /* Home screen look */
