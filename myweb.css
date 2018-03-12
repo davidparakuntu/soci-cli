@@ -1,3 +1,7 @@
+#app-content{
+    display:flex;
+    flex-directio:row;
+}
 .login-container {
     display: flex;
     flex-direction: column;
@@ -226,7 +230,7 @@
     #app-content {
         width: calc(40vw);
         height: calc(100vh);
-        padding-left: calc(26vw);
+        padding-left: calc(6vw);
         padding-top: calc(10vh);
     }
 }
