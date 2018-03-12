@@ -21,15 +21,12 @@ module.exports = function() {
             var calButton = calButtons[i];
             calButton.addEventListener('click', function(event) {
                 window.cal = showCalendar(ec('calendar-holder')[0], calButton);
-                cal.showMonth();
             });
             calButton.addEventListener('touchstart', function(event) {
                 window.cal = showCalendar(ec('calendar-holder')[0], calButton);
-                cal.showMonth();
             });
             calButton.addEventListener('mousedown', function(event) {
                 window.cal = showCalendar(ec('calendar-holder')[0], calButton);
-                cal.showMonth();
             });
         }
 
@@ -116,12 +113,6 @@ module.exports = function() {
                     ec('calendar-holder')[0].style.display = "none";
                     targetNode.value = calendar.selectedDate;
                 });
-                calendar.cp = ec('calendar-page')[0];
-                calendar.cp.addEventListener('touchstart', function(event) {
-                    calendar.touchStartTime = new Date();
-                    calendar.touchStartX = event.touches[0].pageX;
-                    calendar.touchMove = false;
-                });
 
                 ec('calendar-header')[0].addEventListener('click', function() {
                     calendar.showYearBrowser();
@@ -142,6 +133,14 @@ module.exports = function() {
                     return obj;
                 }
                 ;
+
+                calendar.cp = ec('calendar-page')[0];
+                calendar.cp.addEventListener('touchstart', function(event) {
+                    calendar.touchStartTime = new Date();
+                    calendar.touchStartX = event.touches[0].pageX;
+                    calendar.touchMove = false;
+                });
+
                 calendar.cp.addEventListener('touchmove', function(event) {
                     calendar.touchMove = true;
                     calendar.moveX = event.touches[0].pageX;
@@ -153,6 +152,7 @@ module.exports = function() {
                 ec('calendar-nav-right')[0].addEventListener('click', function(event) {
                     cal.showNextMonth();
                 });
+
                 calendar.cp.addEventListener('touchend', function(event) {
                     let timeDiff = new Date() - calendar.touchStartTime;
                     if (timeDiff < 900 && calendar.touchMove) {
@@ -185,7 +185,7 @@ module.exports = function() {
                 });
 
             });
-        });
+        }).then(function(){calendar.showMonth();});
         calendar.showMonth = function() {
             var templateURL = "templates/calendar-week.html";
             fetch(templateURL).then(function(response) {
@@ -199,6 +199,28 @@ module.exports = function() {
                     ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
                     ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
                 });
+            }).then(function() {
+                let dayElements = ec('calendar-day');
+                for(let i = 0; i <dayElements.length; i++) {
+                    let element = dayElements[i];
+                    element.addEventListener('click',function(event) {
+                        var selected = ec('selected-date');
+                        for (var i = 0; i < selected.length; i++) {
+                            selected[0].classList.remove('selected-date')
+                        }
+                        event.target.classList.add('selected-date');
+                        calendar.selectedDate.setDate(event.target.innerText);
+                        calendar.selectedDate.setFullYear(calendar.currentMonth.getFullYear());
+                        calendar.selectedDate.setMonth(calendar.currentMonth.getMonth());
+
+                        ec('selected-year')[0].innerText = "";
+                        ec('selected-day-date-month')[0].innerText = "";
+
+                        ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
+                        ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
+
+                    });
+                }
             });
             var monthDispTemplate = "templates/month-disp.html";
             fetch(monthDispTemplate).then(function(response) {
@@ -216,19 +238,19 @@ module.exports = function() {
 
         }
         calendar.showYearBrowser = function() {
-             ec('year-browser')[0].style.display="flex";
+            ec('year-browser')[0].style.display = "flex";
             var templateURL = "templates/years.html";
-            fetch(templateURL).then(function(response){
-                response.text().then(function(text){
-                    ec('year-browser')[0].innerHTML=hb.compile(text)(calendar.years());
+            fetch(templateURL).then(function(response) {
+                response.text().then(function(text) {
+                    ec('year-browser')[0].innerHTML = hb.compile(text)(calendar.years());
                 });
-            }).then(function(){
-                ec('year-browser')[0].addEventListener('click',function(event){
+            }).then(function() {
+                ec('year-browser')[0].addEventListener('click', function(event) {
                     var selectedYear = event.target.innerText;
                     calendar.currentMonth.setYear(selectedYear);
                     calendar.selectedDate.setYear(selectedYear);
                     calendar.showMonth();
-                    ec('year-browser')[0].style.display="none";
+                    ec('year-browser')[0].style.display = "none";
                 });
             });
 

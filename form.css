@@ -1,77 +1,6 @@
 /*****Slider********/
-@media screen and (min-width: 400px) and (max-width:600px) {
-    .form-div {
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        z-index: 4;
-    }
 
-    .reg-img {
-        height:100%;
-        width:0%;
-    }
-}
-@media screen and (max-width: 1200px) and (min-width: 601px) {
-    .form-div {
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-        width: 75%;
-        position: absolute;
-        left: 26%;
-        z-index: 4;
-    }
 
-    .reg-img {
-        height:100%;
-        width: 25%;
-        background-image:  url('images/register-medium.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-    }
-}
-
-@media screen and (max-width: 2000px) and (min-width: 1201px) {
-    .form-div {
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-        width: 50%;
-        position: absolute;
-        left: 33%;
-        z-index: 4;
-    }
-
-    .reg-img {
-        height:100%;
-        width: 64%;
-        background-image:  url('images/register-medium.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-    }
-}
-@media screen and (min-width: 2001px) {
-    .form-div {
-        display: flex;
-        flex-direction: row;
-        height: 100%;
-        width: 75%;
-        position: absolute;
-        left: 26%;
-        z-index: 4;
-    }
-
-    .reg-img {
-        height:100%;
-        width: 25%;
-        background-image:  url('images/register-medium.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-    }
-}
 .form-fields {
     display: flex;
     flex-direction: column;
@@ -597,9 +526,7 @@
 }
 
 .calendar-trigger {
-    box-shadow: 2px 2px 1px 1px;
-    top: 10%;
-    width: 90%;
+    
 }
 
 .years-row {
