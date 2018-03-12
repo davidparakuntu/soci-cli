@@ -155,6 +155,9 @@
 input:invalid ~ .highlight{
     display:inline;
 }
+
+
+
 .bar {
     position: relative;
     display: block;
