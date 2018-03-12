@@ -8,8 +8,8 @@
         
         
         <div class="form-field">
-            <input type="{{type}}" class="text-input" name="{{name}}" required tabindex="{{tabindex}}" onfocus="this.placeholder='{{label}}'" onfocusout="this.placeholder=''">
-            <span class="highlight"></span>
+            <input type="{{type}}" class="text-input" name="{{name}}" required tabindex="{{tabindex}}" placeholder="{{label}}">
+            <span class="highlight">{{error}}</span>
             <span class="bar"></span>
             <label class="label">{{label}}</label>
         </div>
@@ -37,7 +37,7 @@
         {{#eq type 'date'}}
         <div class="form-field">
             <input type="text" class="text-input calendar-trigger" name="{{name}}" required tabindex="{{tabindex}}" onfocus="this.placeholder='{{label}}'" onfocusout="this.placeholder=''">
-            <span class="highlight"></span>
+            <span class="highlight">{{error}}</span>
             <span class="bar"></span>
             <label class="label">{{label}}</label>
         </div>

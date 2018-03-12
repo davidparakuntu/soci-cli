@@ -651,27 +651,33 @@ exports.init = function(user) {
     instance.page1Form = [{
         "type": "text",
         "name": "first-name",
-        "label": "First Name"
+        "label": "First Name",
+        "error": "Not valid Name"
     }, {
         "type": "text",
         "name": "last-name",
-        "label": "Last Name"
+        "label": "Last Name",
+        "error": "Not valid Name"
     }, {
         "type": "tel",
         "name": "mobile-number",
-        "label": "Mobile Number"
+        "label": "Mobile Number",
+        "error": "Not valid mobile number"
     }, {
         "type": "email",
         "name": "emailId",
-        "label": "E-Mail ID"
+        "label": "E-Mail ID",
+        "error":"Not valid email"
     }, {
         "type": "password",
         "name": "password-one",
-        "label": "Password"
+        "label": "Password",
+        "error":"Password Mismatch"
     }, {
         "type": "password",
         "name": "password-two",
-        "label": "Confirm Password"
+        "label": "Confirm Password",
+        "error":"Password Mismatch"
     }, {
         "type": "action",
         "actionClass": "submit-button",
@@ -696,35 +702,43 @@ exports.init = function(user) {
         "type": "date",
         "name": "date-of-birth",
         "label": "Date of Birth",
-        "value":new Date()
+        "value":new Date(),
+        "error":"Invalid"
     }, {
         "type": "text",
         "name": "house-number",
-        "label": "House Number"
+        "label": "House Number",
+        "error":"Invalid"
     }, {
         "type": "text",
         "name": "street-name",
-        "label": "Street Name"
+        "label": "Street Name",
+        "error":"Invalid"
     }, {
         "type": "text",
         "name": "post-name",
-        "label": "Post"
+        "label": "Post",
+        "error":"Invalid"
     }, {
         "type": "number",
         "name": "pincode",
-        "label": "Pin"
+        "label": "Pin",
+        "error":"Invalid"
     }, {
         "type": "action",
         "actionClass": "submit-button",
-        "label": "Submit"
+        "label": "Submit",
+        "error":"Invalid"
     }, {
         "type": "action",
         "actionClass": "back-button",
-        "label": "Back"
+        "label": "Back",
+        "error":"Invalid"
     }, {
         "type": "action",
         "actionClass": "next-button",
-        "label": "Next"
+        "label": "Next",
+        "error":"Invalid"
     }]
     instance.submitReg = function(user) {
         fetch('http://localhost:7080/user', {
@@ -1585,8 +1599,7 @@ inst.Visitor = _handlebarsCompilerVisitor2['default'];
 inst['default'] = inst;
 
 exports['default'] = inst;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"./handlebars.runtime":9,"./handlebars/compiler/ast":11,"./handlebars/compiler/base":12,"./handlebars/compiler/compiler":14,"./handlebars/compiler/javascript-compiler":16,"./handlebars/compiler/visitor":19,"./handlebars/no-conflict":33}],9:[function(require,module,exports){
 'use strict';
@@ -1653,8 +1666,7 @@ _handlebarsNoConflict2['default'](inst);
 inst['default'] = inst;
 
 exports['default'] = inst;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"./handlebars/base":10,"./handlebars/exception":23,"./handlebars/no-conflict":33,"./handlebars/runtime":34,"./handlebars/safe-string":35,"./handlebars/utils":36}],10:[function(require,module,exports){
 'use strict';
@@ -1759,8 +1771,7 @@ var log = _logger2['default'].log;
 
 exports.log = log;
 exports.createFrame = _utils.createFrame;
-exports.logger = _logger2['default'];
-
+exports.logger = _logger2['default'];
 
 },{"./decorators":21,"./exception":23,"./helpers":24,"./logger":32,"./utils":36}],11:[function(require,module,exports){
 'use strict';
@@ -1792,8 +1803,7 @@ var AST = {
 // Must be exported as an object rather than the root of the module as the jison lexer
 // must modify the object to operate properly.
 exports['default'] = AST;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{}],12:[function(require,module,exports){
 'use strict';
@@ -1842,8 +1852,7 @@ function parse(input, options) {
 
   var strip = new _whitespaceControl2['default'](options);
   return strip.accept(_parser2['default'].parse(input));
-}
-
+}
 
 },{"../utils":36,"./helpers":15,"./parser":17,"./whitespace-control":20}],13:[function(require,module,exports){
 /* global define */
@@ -2010,8 +2019,7 @@ CodeGen.prototype = {
 };
 
 exports['default'] = CodeGen;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"../utils":36,"source-map":38}],14:[function(require,module,exports){
 /* eslint-disable new-cap */
@@ -2585,8 +2593,7 @@ function transformLiteralToPath(sexpr) {
       loc: literal.loc
     };
   }
-}
-
+}
 
 },{"../exception":23,"../utils":36,"./ast":11}],15:[function(require,module,exports){
 'use strict';
@@ -2817,8 +2824,7 @@ function preparePartialBlock(open, program, close, locInfo) {
     closeStrip: close && close.strip,
     loc: this.locInfo(locInfo)
   };
-}
-
+}
 
 },{"../exception":23}],16:[function(require,module,exports){
 'use strict';
@@ -3947,8 +3953,7 @@ function strictLookup(requireTerminal, compiler, parts, type) {
 }
 
 exports['default'] = JavaScriptCompiler;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"../base":10,"../exception":23,"../utils":36,"./code-gen":13}],17:[function(require,module,exports){
 // File ignored in coverage tests via setting in .istanbul.yml
@@ -4688,8 +4693,7 @@ var handlebars = (function () {
     }Parser.prototype = parser;parser.Parser = Parser;
     return new Parser();
 })();exports["default"] = handlebars;
-module.exports = exports["default"];
-
+module.exports = exports["default"];
 
 },{}],18:[function(require,module,exports){
 /* eslint-disable new-cap */
@@ -4876,8 +4880,7 @@ PrintVisitor.prototype.Hash = function (hash) {
 PrintVisitor.prototype.HashPair = function (pair) {
   return pair.key + '=' + this.accept(pair.value);
 };
-/* eslint-enable new-cap */
-
+/* eslint-enable new-cap */
 
 },{"./visitor":19}],19:[function(require,module,exports){
 'use strict';
@@ -5018,8 +5021,7 @@ function visitPartial(partial) {
 }
 
 exports['default'] = Visitor;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"../exception":23}],20:[function(require,module,exports){
 'use strict';
@@ -5241,8 +5243,7 @@ function omitLeft(body, i, multiple) {
 }
 
 exports['default'] = WhitespaceControl;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"./visitor":19}],21:[function(require,module,exports){
 'use strict';
@@ -5259,8 +5260,7 @@ var _decoratorsInline2 = _interopRequireDefault(_decoratorsInline);
 
 function registerDefaultDecorators(instance) {
   _decoratorsInline2['default'](instance);
-}
-
+}
 
 },{"./decorators/inline":22}],22:[function(require,module,exports){
 'use strict';
@@ -5290,8 +5290,7 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"../utils":36}],23:[function(require,module,exports){
 'use strict';
@@ -5346,8 +5345,7 @@ function Exception(message, node) {
 Exception.prototype = new Error();
 
 exports['default'] = Exception;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{}],24:[function(require,module,exports){
 'use strict';
@@ -5394,8 +5392,7 @@ function registerDefaultHelpers(instance) {
   _helpersLog2['default'](instance);
   _helpersLookup2['default'](instance);
   _helpersWith2['default'](instance);
-}
-
+}
 
 },{"./helpers/block-helper-missing":25,"./helpers/each":26,"./helpers/helper-missing":27,"./helpers/if":28,"./helpers/log":29,"./helpers/lookup":30,"./helpers/with":31}],25:[function(require,module,exports){
 'use strict';
@@ -5435,8 +5432,7 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"../utils":36}],26:[function(require,module,exports){
 'use strict';
@@ -5531,8 +5527,7 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"../exception":23,"../utils":36}],27:[function(require,module,exports){
 'use strict';
@@ -5558,8 +5553,7 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"../exception":23}],28:[function(require,module,exports){
 'use strict';
@@ -5589,8 +5583,7 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"../utils":36}],29:[function(require,module,exports){
 'use strict';
@@ -5617,8 +5610,7 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{}],30:[function(require,module,exports){
 'use strict';
@@ -5631,8 +5623,7 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{}],31:[function(require,module,exports){
 'use strict';
@@ -5666,8 +5657,7 @@ exports['default'] = function (instance) {
   });
 };
 
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"../utils":36}],32:[function(require,module,exports){
 'use strict';
@@ -5715,8 +5705,7 @@ var logger = {
 };
 
 exports['default'] = logger;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{"./utils":36}],33:[function(require,module,exports){
 (function (global){
@@ -5738,8 +5727,7 @@ exports['default'] = function (Handlebars) {
   };
 };
 
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],34:[function(require,module,exports){
@@ -6048,8 +6036,7 @@ function executeDecorators(fn, prog, container, depths, data, blockParams) {
     Utils.extend(prog, props);
   }
   return prog;
-}
-
+}
 
 },{"./base":10,"./exception":23,"./utils":36}],35:[function(require,module,exports){
 // Build out our basic SafeString type
@@ -6065,8 +6052,7 @@ SafeString.prototype.toString = SafeString.prototype.toHTML = function () {
 };
 
 exports['default'] = SafeString;
-module.exports = exports['default'];
-
+module.exports = exports['default'];
 
 },{}],36:[function(require,module,exports){
 'use strict';
@@ -6191,8 +6177,7 @@ function blockParams(params, ids) {
 
 function appendContextPath(contextPath, id) {
   return (contextPath ? contextPath + '.' : '') + id;
-}
-
+}
 
 },{}],37:[function(require,module,exports){
 // USAGE:

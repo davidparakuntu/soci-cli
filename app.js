@@ -234,27 +234,33 @@ exports.init = function(user) {
     instance.page1Form = [{
         "type": "text",
         "name": "first-name",
-        "label": "First Name"
+        "label": "First Name",
+        "error": "Not valid Name"
     }, {
         "type": "text",
         "name": "last-name",
-        "label": "Last Name"
+        "label": "Last Name",
+        "error": "Not valid Name"
     }, {
         "type": "tel",
         "name": "mobile-number",
-        "label": "Mobile Number"
+        "label": "Mobile Number",
+        "error": "Not valid mobile number"
     }, {
         "type": "email",
         "name": "emailId",
-        "label": "E-Mail ID"
+        "label": "E-Mail ID",
+        "error":"Not valid email"
     }, {
         "type": "password",
         "name": "password-one",
-        "label": "Password"
+        "label": "Password",
+        "error":"Password Mismatch"
     }, {
         "type": "password",
         "name": "password-two",
-        "label": "Confirm Password"
+        "label": "Confirm Password",
+        "error":"Password Mismatch"
     }, {
         "type": "action",
         "actionClass": "submit-button",
@@ -279,35 +285,43 @@ exports.init = function(user) {
         "type": "date",
         "name": "date-of-birth",
         "label": "Date of Birth",
-        "value":new Date()
+        "value":new Date(),
+        "error":"Invalid"
     }, {
         "type": "text",
         "name": "house-number",
-        "label": "House Number"
+        "label": "House Number",
+        "error":"Invalid"
     }, {
         "type": "text",
         "name": "street-name",
-        "label": "Street Name"
+        "label": "Street Name",
+        "error":"Invalid"
     }, {
         "type": "text",
         "name": "post-name",
-        "label": "Post"
+        "label": "Post",
+        "error":"Invalid"
     }, {
         "type": "number",
         "name": "pincode",
-        "label": "Pin"
+        "label": "Pin",
+        "error":"Invalid"
     }, {
         "type": "action",
         "actionClass": "submit-button",
-        "label": "Submit"
+        "label": "Submit",
+        "error":"Invalid"
     }, {
         "type": "action",
         "actionClass": "back-button",
-        "label": "Back"
+        "label": "Back",
+        "error":"Invalid"
     }, {
         "type": "action",
         "actionClass": "next-button",
-        "label": "Next"
+        "label": "Next",
+        "error":"Invalid"
     }]
     instance.submitReg = function(user) {
         fetch('http://localhost:7080/user', {

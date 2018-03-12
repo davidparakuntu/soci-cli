@@ -119,7 +119,7 @@
     border: none;
     font-size: 18px;
     border-bottom: 1px solid black;
-    width: 90%;
+    width: 74%;
     cursor: pointer;
     z-index: 1;
     position: relative;
@@ -148,6 +148,13 @@
     color: #5264AE;
 }
 
+.highlight{
+    color:red;
+    display:none;
+}
+input:invalid ~ .highlight{
+    display:inline;
+}
 .bar {
     position: relative;
     display: block;
@@ -166,17 +173,8 @@
     transition: 0.2s ease all;
 }
 
-/*input:invalid{
-    color:red;
-}
-input:invalid ~ .label{
-    top:-20px;
-    color:red;
-}
-input:invalid ~ .label, input:placeholder-shown{
-     //top: -20px;
-    color:#0c9ea7;
-} */
+
+
 @media screen and (min-width: 4401px) and (max-width: 5200px) {
     #app-content {
         width: calc(80vw);
