@@ -45,8 +45,6 @@
     top: 10%;
 }
 
-
-
 .register-logo {
     width: 29%;
     height: 76%;
@@ -59,8 +57,6 @@
     position: relative;
     padding-top: 5%;
 }
-
-
 
 .login-seperator {
     height: -4%;
@@ -141,6 +137,9 @@
     color: #5264AE;
 }
 
+
+
+
 .bar {
     position: relative;
     display: block;
@@ -156,16 +155,116 @@
     height: 2px;
     left: 0%;
     right: 0%;
-    background-color: #5264AE;
     transition: 0.2s ease all;
 }
 
-#app-content {
-    width: calc(100vw);
-    height: calc(100vh);
-    /* margin-left: 2%; */
+:not(input:placeholder-shown){
+    color:red;
 }
 
+@media screen and (min-width: 4401px) and (max-width: 5200px) {
+    #app-content {
+        width: calc(40vw);
+        height: calc(100vh);
+        padding-left: calc(26vw);
+        padding-top: calc(10vh);
+        padding-right: calc(34vw);
+    }
+}
+
+@media screen and (min-width: 4001px) and (max-width: 4400px) {
+    #app-content {
+        width: calc(40vw);
+        height: calc(100vh);
+        padding-left: calc(26vw);
+        padding-top: calc(10vh);
+        padding-right: calc(34vw);
+    }
+}
+@media screen and (min-width: 3601px) and (max-width: 4000px) {
+    #app-content {
+       width: calc(40vw);
+        height: calc(100vh);
+        padding-left: calc(26vw);
+        padding-top: calc(10vh);
+    }
+}
+
+@media screen and (min-width: 3201px) and (max-width: 3600px) {
+    #app-content {
+        width: calc(40vw);
+        height: calc(100vh);
+        padding-left: calc(26vw);
+        padding-top: calc(10vh);
+    }
+}
+@media screen and (min-width: 2801px) and (max-width: 3200px) {
+    #app-content {
+        width: calc(40vw);
+        height: calc(100vh);
+        padding-left: calc(26vw);
+        padding-top: calc(10vh);
+    }
+}
+@media screen and (min-width: 2401px) and (max-width: 2800px) {
+    #app-content {
+        width: calc(40vw);
+        height: calc(100vh);
+        padding-left: calc(26vw);
+        padding-top: calc(10vh);
+    }
+}
+@media screen and (min-width: 2001px) and (max-width: 2400px) {
+    #app-content {
+        width: calc(40vw);
+        height: calc(100vh);
+        padding-left: calc(15vw);
+        padding-top: calc(10vh);
+    }
+}
+@media screen and (min-width:1601px) and (max-width: 2000px) {
+    #app-content {
+        width: calc(40vw);
+        height: calc(100vh);
+        padding-left: calc(26vw);
+        padding-top: calc(10vh);
+    }
+}
+
+@media screen and (min-width:981px) and (max-width: 1600px) {
+    #app-content {
+        width: calc(60vw);
+        height: calc(100vh);
+        padding-left: calc(7vw);
+        padding-top: calc(10vh);
+    }
+}
+
+@media screen and (min-width:701px)and (max-width: 980px) {
+    #app-content {
+         width: calc(80vw);
+         height: calc(100vh);
+         padding-left: calc(2vw);
+         padding-top: calc(10vh);
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width:700px) {
+    #app-content {
+        width: calc(100vw);
+        height: calc(100vh);
+        padding-left: cal(12vw);
+        padding-top: calc(2vh);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #app-content {
+        width: calc(100vw);
+        height: calc(100vh);
+        padding-top: calc(5vh);
+    }
+}
 .button:active {
     box-shadow: 1px 1px 1px 1px rgb(204,204,204);
 }
