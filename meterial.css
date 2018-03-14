@@ -1,21 +1,98 @@
-.btn {
-  position: relative;
+input[type="text"] {
+    -webkit-appearance: none;
+    outline: none;
+}
 
-  display: block;
-  margin: 30px auto;
-  padding: 0;
+input[type="password"] {
+    -webkit-appearance: none;
+    outline: none;
+}
+input[type="tel"] {
+    -webkit-appearance: none;
+    outline: none;
+}
+input[type="number"] {
+    -webkit-appearance: none;
+    outline: none;
+}
+input[type="email"] {
+    -webkit-appearance: none;
+    outline: none;
+}
+input[type="date"] {
+    -webkit-appearance: none;
+    outline: none;
+}
 
-  overflow: hidden;
+.text-input {
+    position: absolute;
+    top: 20%;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid grey;
+    height: 60%;
+    width: 100%;
+    font-size: 125%;
+}
+::placeholder{
+    color:#8080803b;
+    top:10px;
+    
+}
+.text-input:focus ~ .label, .text-input:valid ~ .label {
+    color: green;
+    top: 0%;
+    font-size: 80%;
+}
 
-  border-width: 0;
-  outline: none;
-  border-radius: 2px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
-
-  background-color: #2ecc71;
-  color: #ecf0f1;
-
-  transition: background-color .3s;
+.label:active{
+    color: green;
+    top: 0%;
+    font-size: 80%;
 }
 
 
+
+
+.highlight {
+    display: none;
+}
+
+.bar {
+    height: 2px;
+    top: 79%;
+    left: 50%;
+    right: 50%;
+    background-color: blue;
+    position: absolute;
+    transition: left 0.1s ease, right 0.1s ease;
+}
+
+.text-input:hover ~ .bar {
+    left: 0%;
+    right: 0%;
+}
+
+.test-class {
+    left: 0%;
+    right: 0%;
+}
+
+.text-input-filled {
+}
+
+.label {
+    position: absolute;
+    top: 80%;
+    color: transparent;
+    transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+    font-size: 130%;
+    /* z-index: -1; */
+}
+
+.filled-label {
+    color: green;
+    top: 0%;
+    font-size: 80%;
+}

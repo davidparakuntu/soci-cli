@@ -5,6 +5,9 @@ module.exports = function() {
     window.en = function(name) {
         return document.getElementsByName(name);
     }
+    window.et = function(name) {
+        return document.getElementsByTagName(name);
+    }
     window.ei = function(id) {
         return document.getElementById(id);
     }
@@ -185,7 +188,9 @@ module.exports = function() {
                 });
 
             });
-        }).then(function(){calendar.showMonth();});
+        }).then(function() {
+            calendar.showMonth();
+        });
         calendar.showMonth = function() {
             var templateURL = "templates/calendar-week.html";
             fetch(templateURL).then(function(response) {
@@ -198,29 +203,29 @@ module.exports = function() {
                     ec('month-days')[0].style.left = "1%";
                     ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
                     ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
+                }).then(function() {
+                    let dayElements = ec('calendar-day');
+                    for (let i = 0; i < dayElements.length; i++) {
+                        let element = dayElements[i];
+                        element.addEventListener('click', function(event) {
+                            var selected = ec('selected-date');
+                            for (var i = 0; i < selected.length; i++) {
+                                selected[0].classList.remove('selected-date')
+                            }
+                            event.target.classList.add('selected-date');
+                            calendar.selectedDate.setDate(event.target.innerText);
+                            calendar.selectedDate.setFullYear(calendar.currentMonth.getFullYear());
+                            calendar.selectedDate.setMonth(calendar.currentMonth.getMonth());
+
+                            ec('selected-year')[0].innerText = "";
+                            ec('selected-day-date-month')[0].innerText = "";
+
+                            ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
+                            ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
+
+                        });
+                    }
                 });
-            }).then(function() {
-                let dayElements = ec('calendar-day');
-                for(let i = 0; i <dayElements.length; i++) {
-                    let element = dayElements[i];
-                    element.addEventListener('click',function(event) {
-                        var selected = ec('selected-date');
-                        for (var i = 0; i < selected.length; i++) {
-                            selected[0].classList.remove('selected-date')
-                        }
-                        event.target.classList.add('selected-date');
-                        calendar.selectedDate.setDate(event.target.innerText);
-                        calendar.selectedDate.setFullYear(calendar.currentMonth.getFullYear());
-                        calendar.selectedDate.setMonth(calendar.currentMonth.getMonth());
-
-                        ec('selected-year')[0].innerText = "";
-                        ec('selected-day-date-month')[0].innerText = "";
-
-                        ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
-                        ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
-
-                    });
-                }
             });
             var monthDispTemplate = "templates/month-disp.html";
             fetch(monthDispTemplate).then(function(response) {

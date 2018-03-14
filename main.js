@@ -523,9 +523,20 @@ exports.init = function(user) {
                 console.log('reading template success');
             }).then(function(msg) {
                 console.log(msg + " in succ");
+
+                var inputs = et('input');
+                for (var i = 0; i < inputs.length; i++) {
+                    inputs[i].addEventListener('blur', function(event) {
+                        if(event.target.value != ''){
+                          event.target.parentElement.children[3].classList.add('filled-label');
+                        }
+                    });
+                }
+
                 actionclassMap.forEach(function(actionClass) {
                     ec(actionClass.actionClass)[0].addEventListener('click', actionClass.action);
                 });
+
             }).catch(function(msg) {
                 console.log(msg)
                 console.log('Unable to read template');
@@ -667,17 +678,17 @@ exports.init = function(user) {
         "type": "email",
         "name": "emailId",
         "label": "E-Mail ID",
-        "error":"Not valid email"
+        "error": "Not valid email"
     }, {
         "type": "password",
         "name": "password-one",
         "label": "Password",
-        "error":"Password Mismatch"
+        "error": "Password Mismatch"
     }, {
         "type": "password",
         "name": "password-two",
         "label": "Confirm Password",
-        "error":"Password Mismatch"
+        "error": "Password Mismatch"
     }, {
         "type": "action",
         "actionClass": "submit-button",
@@ -702,43 +713,43 @@ exports.init = function(user) {
         "type": "date",
         "name": "date-of-birth",
         "label": "Date of Birth",
-        "value":new Date(),
-        "error":"Invalid"
+        "value": new Date(),
+        "error": "Invalid"
     }, {
         "type": "text",
         "name": "house-number",
         "label": "House Number",
-        "error":"Invalid"
+        "error": "Invalid"
     }, {
         "type": "text",
         "name": "street-name",
         "label": "Street Name",
-        "error":"Invalid"
+        "error": "Invalid"
     }, {
         "type": "text",
         "name": "post-name",
         "label": "Post",
-        "error":"Invalid"
+        "error": "Invalid"
     }, {
         "type": "number",
         "name": "pincode",
         "label": "Pin",
-        "error":"Invalid"
+        "error": "Invalid"
     }, {
         "type": "action",
         "actionClass": "submit-button",
         "label": "Submit",
-        "error":"Invalid"
+        "error": "Invalid"
     }, {
         "type": "action",
         "actionClass": "back-button",
         "label": "Back",
-        "error":"Invalid"
+        "error": "Invalid"
     }, {
         "type": "action",
         "actionClass": "next-button",
         "label": "Next",
-        "error":"Invalid"
+        "error": "Invalid"
     }]
     instance.submitReg = function(user) {
         fetch('http://localhost:7080/user', {
@@ -805,6 +816,9 @@ module.exports = function() {
     }
     window.en = function(name) {
         return document.getElementsByName(name);
+    }
+    window.et = function(name) {
+        return document.getElementsByTagName(name);
     }
     window.ei = function(id) {
         return document.getElementById(id);
@@ -986,7 +1000,9 @@ module.exports = function() {
                 });
 
             });
-        }).then(function(){calendar.showMonth();});
+        }).then(function() {
+            calendar.showMonth();
+        });
         calendar.showMonth = function() {
             var templateURL = "templates/calendar-week.html";
             fetch(templateURL).then(function(response) {
@@ -999,29 +1015,29 @@ module.exports = function() {
                     ec('month-days')[0].style.left = "1%";
                     ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
                     ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
+                }).then(function() {
+                    let dayElements = ec('calendar-day');
+                    for (let i = 0; i < dayElements.length; i++) {
+                        let element = dayElements[i];
+                        element.addEventListener('click', function(event) {
+                            var selected = ec('selected-date');
+                            for (var i = 0; i < selected.length; i++) {
+                                selected[0].classList.remove('selected-date')
+                            }
+                            event.target.classList.add('selected-date');
+                            calendar.selectedDate.setDate(event.target.innerText);
+                            calendar.selectedDate.setFullYear(calendar.currentMonth.getFullYear());
+                            calendar.selectedDate.setMonth(calendar.currentMonth.getMonth());
+
+                            ec('selected-year')[0].innerText = "";
+                            ec('selected-day-date-month')[0].innerText = "";
+
+                            ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
+                            ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
+
+                        });
+                    }
                 });
-            }).then(function() {
-                let dayElements = ec('calendar-day');
-                for(let i = 0; i <dayElements.length; i++) {
-                    let element = dayElements[i];
-                    element.addEventListener('click',function(event) {
-                        var selected = ec('selected-date');
-                        for (var i = 0; i < selected.length; i++) {
-                            selected[0].classList.remove('selected-date')
-                        }
-                        event.target.classList.add('selected-date');
-                        calendar.selectedDate.setDate(event.target.innerText);
-                        calendar.selectedDate.setFullYear(calendar.currentMonth.getFullYear());
-                        calendar.selectedDate.setMonth(calendar.currentMonth.getMonth());
-
-                        ec('selected-year')[0].innerText = "";
-                        ec('selected-day-date-month')[0].innerText = "";
-
-                        ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
-                        ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
-
-                    });
-                }
             });
             var monthDispTemplate = "templates/month-disp.html";
             fetch(monthDispTemplate).then(function(response) {

@@ -21,8 +21,8 @@
     padding: 0%;
     display: flex;
     flex-direction: row;
-    width: 100%;
-    justify-content: space-evenly;
+    width: 74%;
+    justify-content: space-between;
 }
 
 .range-track {
