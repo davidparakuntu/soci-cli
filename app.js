@@ -105,8 +105,6 @@ exports.init = function(user) {
                 activateCalendar(ec('calendar-trigger'));
                 console.log('reading template success');
             }).then(function(msg) {
-                console.log(msg + " in succ");
-
                 var inputs = et('input');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].addEventListener('blur', function(event) {
