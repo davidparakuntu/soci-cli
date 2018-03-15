@@ -204,27 +204,7 @@ module.exports = function() {
                     ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
                     ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
                 }).then(function() {
-                    let dayElements = ec('calendar-day');
-                    for (let i = 0; i < dayElements.length; i++) {
-                        let element = dayElements[i];
-                        element.addEventListener('click', function(event) {
-                            var selected = ec('selected-date');
-                            for (var i = 0; i < selected.length; i++) {
-                                selected[0].classList.remove('selected-date')
-                            }
-                            event.target.classList.add('selected-date');
-                            calendar.selectedDate.setDate(event.target.innerText);
-                            calendar.selectedDate.setFullYear(calendar.currentMonth.getFullYear());
-                            calendar.selectedDate.setMonth(calendar.currentMonth.getMonth());
-
-                            ec('selected-year')[0].innerText = "";
-                            ec('selected-day-date-month')[0].innerText = "";
-
-                            ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
-                            ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
-
-                        });
-                    }
+                    calendar.activateMouseClick();
                 });
             });
             var monthDispTemplate = "templates/month-disp.html";
@@ -241,6 +221,29 @@ module.exports = function() {
                 });
             });
 
+        }
+        calendar.activateMouseClick = function() {
+            let dayElements = ec('calendar-day');
+            for (let i = 0; i < dayElements.length; i++) {
+                let element = dayElements[i];
+                element.addEventListener('click', function(event) {
+                    var selected = ec('selected-date');
+                    for (var i = 0; i < selected.length; i++) {
+                        selected[0].classList.remove('selected-date')
+                    }
+                    event.target.classList.add('selected-date');
+                    calendar.selectedDate.setDate(event.target.innerText);
+                    calendar.selectedDate.setFullYear(calendar.currentMonth.getFullYear());
+                    calendar.selectedDate.setMonth(calendar.currentMonth.getMonth());
+
+                    ec('selected-year')[0].innerText = "";
+                    ec('selected-day-date-month')[0].innerText = "";
+
+                    ec('selected-year')[0].innerText = calendar.selectedDate.getFullYear();
+                    ec('selected-day-date-month')[0].innerText = dayMap.get(calendar.selectedDate.getDay()).substr(0, 3) + ", " + monthMap.get(calendar.selectedDate.getMonth()).substr(0, 3) + " " + calendar.selectedDate.getDate()
+
+                });
+            }
         }
         calendar.showYearBrowser = function() {
             ec('year-browser')[0].style.display = "flex";
@@ -282,6 +285,7 @@ module.exports = function() {
                     setTimeout(function() {
                         allNodes[1].style.left = "1%";
                     }, 200);
+                    calendar.activateMouseClick();
                 }).catch(function(e) {
                     console.log(e);
                 });
@@ -324,6 +328,7 @@ module.exports = function() {
                     setTimeout(function() {
                         allNodes[1].style.left = "1%";
                     }, 200);
+                    calendar.activateMouseClick();
                 }).catch(function(e) {
                     console.log(e);
                 });

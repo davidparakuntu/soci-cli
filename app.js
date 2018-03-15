@@ -110,8 +110,10 @@ exports.init = function(user) {
                 var inputs = et('input');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].addEventListener('blur', function(event) {
-                        if(event.target.value != ''){
-                          event.target.parentElement.children[3].classList.add('filled-label');
+                        if (event.target.value != '') {
+                            event.target.parentElement.children[3].classList.add('filled-label');
+                        } else {
+                            event.target.parentElement.children[3].classList.remove('filled-label');
                         }
                     });
                 }

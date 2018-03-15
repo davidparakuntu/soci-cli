@@ -27,7 +27,7 @@
 
 .range-track {
     height: 3px;
-    width: 90%;
+    width: 100%;
     background-color: lightgrey;
     position: absolute;
     top: 40%;
