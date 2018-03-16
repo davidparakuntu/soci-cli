@@ -7,18 +7,22 @@ input[type="password"] {
     -webkit-appearance: none;
     outline: none;
 }
+
 input[type="tel"] {
     -webkit-appearance: none;
     outline: none;
 }
+
 input[type="number"] {
     -webkit-appearance: none;
     outline: none;
 }
+
 input[type="email"] {
     -webkit-appearance: none;
     outline: none;
 }
+
 input[type="date"] {
     -webkit-appearance: none;
     outline: none;
@@ -36,30 +40,31 @@ input[type="date"] {
     font-size: 125%;
     color: #0760f2e8;
 }
-::placeholder{
-    color:#8080803b;
-    top:10px;
-    
+
+::placeholder {
+    color: #8080803b;
+    top: 10px;
 }
+
 .text-input:focus ~ .label, .text-input:valid ~ .label {
     color: #000800;
     top: 0%;
     font-size: 80%;
-    visibility:visible;
+    visibility: visible;
 }
 
-.label:active{
+.label:active {
     color: green;
     top: 0%;
     font-size: 80%;
-    visibility:visible;
+    visibility: visible;
 }
 
-
-
-
 .highlight {
-    display: none;
+    visibility: hidden;
+    top: 78%;
+    position: absolute;
+    color: red;
 }
 
 .bar {
@@ -98,5 +103,46 @@ input[type="date"] {
     color: #000900;
     top: 0%;
     font-size: 80%;
+    visibility: visible;
+}
+
+
+.text-input-invalid {
+    color:red;
+    text-decoration: line-through;
+}
+
+.input-invalid {
     visibility:visible;
+    animation: say-no 0.5s 2;
+}
+
+.red{
+    color:red;
+}
+@keyframes say-no {
+    0% {
+        color: red;
+        left: -10px;
+    }
+
+    25% {
+        color: red;
+        left: 10px;
+    }
+
+    50% {
+        color: red;
+        left: -5px;
+    }
+
+    75% {
+        color: red;
+        left: 5px;
+    }
+
+    100% {
+        color: red;
+        left: 0px;
+    }
 }

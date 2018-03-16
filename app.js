@@ -66,9 +66,24 @@ exports.init = function(user) {
                     inputs[i].addEventListener('blur', function(event) {
                         if (event.target.value != '') {
                             event.target.parentElement.children[3].classList.add('filled-label');
+                            if (!event.target.checkValidity()) {
+                                event.target.classList.add('text-input-invalid');
+                                event.target.parentElement.children[3].classList.add('input-invalid');
+                                event.target.parentElement.children[1].classList.add('input-invalid');
+                                event.target.parentElement.children[3].classList.add('red');
+                                event.target.parentElement.children[1].style.display="block";
+                                setTimeout(function() {
+                                    event.target.parentElement.children[3].classList.remove('input-invalid');
+                                },500);
+                            }
                         } else {
                             event.target.parentElement.children[3].classList.remove('filled-label');
                         }
+                    });
+                    inputs[i].addEventListener('focus', function(event) {
+                        event.target.parentElement.children[3].classList.remove('red');
+                        event.target.classList.remove('text-input-invalid');
+                        event.target.parentElement.children[1].classList.remove('input-invalid');
                     });
                 }
 
