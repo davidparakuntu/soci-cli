@@ -33,7 +33,7 @@
 }
 
 .field {
-    width: 100%;
+    width: 72%;
     position: relative;
     cursor: pointer;
     height: 70px;
@@ -98,8 +98,8 @@
     position: relative;
     display: flex;
     flex-direction: row;
-    left: -6%;
-    justify-content: space-around;
+    justify-content: space-between;
+    width: 72%;
 }
 
 .button {
@@ -107,14 +107,16 @@
 }
 
 .login-button.button {
-    background-color: rgb(113,82,70);
+    background-color: rgba(113, 82, 70, 0.76);
 }
 
 .cancel-button.button {
-    background-color: rgb(113,82,70);
+    background-color: rgba(113, 82, 70, 0.76);
 }
 
-
+.reg-link.button {
+    background-color: rgba(113, 82, 70, 0.76);
+}
 
 @media screen and (min-width: 4401px) and (max-width: 5200px) {
     #app-content {
@@ -417,9 +419,10 @@
         display: flex;
         flex-direction: row;
         height: 100%;
-        width: 100%;
+        width: 95%;
         position: absolute;
         z-index: 4;
+        left: 10%;
     }
 
     .reg-img {
@@ -444,9 +447,25 @@
         z-index: 4;
     }
 
+    .field {
+        width: 90%;
+        position: relative;
+        cursor: pointer;
+        height: 70px;
+    }
+
     .reg-img {
         height: 100%;
         width: 0%;
+    }
+
+    .login-action-panel {
+        padding: 0%;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 90%;
     }
 }
 
@@ -456,12 +475,12 @@
 
 .button {
     width: 91px;
-    height: 25px;
+    height: 22px;
     text-align: center;
     background-color: rgb(136,92,32);
     cursor: pointer;
-    padding-top: 4px;
-    box-shadow: 2px 1px 3px 1px black;
+    padding-top: 3px;
+    box-shadow: 2px 1px 3px 1px #00000091;
 }
 
 /* Home screen look */
@@ -494,19 +513,19 @@
 }
 
 .tool-area {
-    background-color: red;
+    background-color: #ff000000;
     width: 30%;
     height: 100%;
 }
 
 .navigation-bar {
-    background-color: green;
+    background-color: #cad1ca03;
     width: 20%;
     height: 100%;
 }
 
 .menu-bar {
-    background-color: grey;
+    background-color: #80808003;
     width: 100%;
     height: 10%;
 }
@@ -519,7 +538,7 @@
 }
 
 .context-area {
-    background-color: blue;
+    background-color: #0000ff00;
     height: 100%;
 }
 

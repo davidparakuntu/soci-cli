@@ -66,7 +66,7 @@ self.addEventListener('fetch', function(event) {
             if(response){
               return response.clone();
             }else{
-              return fetch(event.request);
+              return fetch(event.request.clone());
             }
         }).catch(function(){
           console.log('No match')

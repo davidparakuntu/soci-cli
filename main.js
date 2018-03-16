@@ -462,50 +462,6 @@ exports.init = function(user) {
             console.log("fetch " + templateURL + " failed")
         })
     }
-    instance.renderRegister = function(templateURL, object, targetNode) {
-        fetch(templateURL).then(function(response) {
-            response.text().then(function(text) {
-                targetNode.innerHTML = instance.hb.compile(text)(object);
-            }).then(function() {
-                ec('register-button')[0].addEventListener('click', function() {
-                    //let obj = {"contact":{"mobileNumber":[1213213,343434],"emailIDs":["xx@yy.com"]},"name":{"firstName":"Dvd","lastName":"Mat","fullName":"Dvd Mat","displayName":"Hello Sir"}};
-                    let user = {};
-                    user.id = en('email-id')[0].value;
-                    user.contact = {};
-                    user.name = {};
-                    user.name.firstName = en('first-name')[0].value;
-                    user.name.lastName = en('last-name')[0].value;
-                    user.name.displayName = user.name.firstName + ' ' + user.name.lastName;
-                    user.name.fullName = user.name.displayName;
-                    user.contact.mobileNumber = [en('mobile-number')[0].value];
-                    user.contact.emailIDs = [user.id];
-                    let password = en('password-one')[0].value;
-                    if (password === en('password-two')[0].value) {
-                        user.password = password;
-                        fetch('http://localhost:7080/user', {
-                            method: "POST",
-                            body: JSON.stringify(user),
-                            headers: new Headers({
-                                'Content-Type': 'application/json'
-                            })
-                        }).then(function() {
-                            console.log('Posted the user');
-                            app.renderLogin();
-                        }).catch(function() {
-                            console.log('Issues');
-                        });
-                    } else {
-                        console.log('password did not match')
-                    }
-                });
-            }).catch(function() {
-                console.log('Unable to read template');
-            })
-        }).catch(function() {
-            console.log("fetch " + templateURL + " failed")
-        })
-
-    }
 
     instance.showForm = function(object, actionclassMap, targetNode) {
         var templateURL = "templates/form.html";
@@ -522,8 +478,6 @@ exports.init = function(user) {
                 activateCalendar(ec('calendar-trigger'));
                 console.log('reading template success');
             }).then(function(msg) {
-                console.log(msg + " in succ");
-
                 var inputs = et('input');
                 for (var i = 0; i < inputs.length; i++) {
                     inputs[i].addEventListener('blur', function(event) {
@@ -618,15 +572,7 @@ exports.init = function(user) {
                             }
                         }
                     }, {
-                        "actionClass": "next-button",
-                        "action": function(event) {
-                            if (instance.fillUser(user)) {
-                                formObj.fields = instance.page2Form;
-                                instance.showForm(formObj, actionMap, ei('app-content'));
-                            }
-                        }
-                    }, {
-                        "actionClass": "back-button",
+                        "actionClass": "reset-button",
                         "action": function(event) {
                             if (instance.fillUser(user)) {
                                 formObj.fields = instance.page2Form;
@@ -634,7 +580,6 @@ exports.init = function(user) {
                             }
                         }
                     }];
-
                     instance.showForm(formObj, actionMap, ei('app-content'));
 
                 });
@@ -646,14 +591,12 @@ exports.init = function(user) {
     }
     instance.fillUser = function(user) {
         user.id = en('emailId')[0].value;
-        user.name.firstName = en('first-name')[0].value;
-        user.name.lastName = en('last-name')[0].value;
+        user.name.fullName = en('fullName')[0].value;
         user.name.displayName = user.name.firstName + ' ' + user.name.lastName;
-        user.name.fullName = user.name.displayName;
-        user.contact.mobileNumber = [en('mobile-number')[0].value];
+        user.contact.mobileNumber = [en('mobileNumber')[0].value];
         user.contact.emailIDs = [user.id];
         let password = en('password-one')[0].value;
-        if (password === en('password-two')[0].value) {
+        if (password === en('password')[0].value) {
             user.password = password;
             return user;
         } else {
@@ -663,19 +606,19 @@ exports.init = function(user) {
     }
     instance.page1Form = [{
         "type": "text",
-        "name": "first-name",
-        "label": "First Name",
-        "error": "Not valid Name"
-    }, {
-        "type": "text",
-        "name": "last-name",
-        "label": "Last Name",
+        "name": "fullName",
+        "label": "Full Name",
         "error": "Not valid Name"
     }, {
         "type": "tel",
-        "name": "mobile-number",
+        "name": "mobileNumber",
         "label": "Mobile Number",
-        "error": "Not valid mobile number"
+        "error": "Mobile number is not valid"
+    }, {
+        "type": "date",
+        "name": "dateOfBirth",
+        "label": "Date of Birth",
+        "error": "Invalid"
     }, {
         "type": "email",
         "name": "emailId",
@@ -688,71 +631,19 @@ exports.init = function(user) {
         "error": "Password Mismatch"
     }, {
         "type": "password",
-        "name": "password-two",
+        "name": "password",
         "label": "Confirm Password",
         "error": "Password Mismatch"
-    }, {
-        "type": "action",
-        "actionClass": "submit-button",
-        "label": "Submit"
     }, {
         "type": "action",
         "actionClass": "reset-button",
         "label": "Reset"
     }, {
         "type": "action",
-        "actionClass": "next-button",
-        "label": "Next"
+        "actionClass": "submit-button",
+        "label": "Register"
     }]
 
-    instance.page2Form = [{
-        "type": "range",
-        "name": "age",
-        "label": "Age",
-        "min": "6",
-        "max": "70"
-    }, {
-        "type": "date",
-        "name": "date-of-birth",
-        "label": "Date of Birth",
-        "value": new Date(),
-        "error": "Invalid"
-    }, {
-        "type": "text",
-        "name": "house-number",
-        "label": "House Number",
-        "error": "Invalid"
-    }, {
-        "type": "text",
-        "name": "street-name",
-        "label": "Street Name",
-        "error": "Invalid"
-    }, {
-        "type": "text",
-        "name": "post-name",
-        "label": "Post",
-        "error": "Invalid"
-    }, {
-        "type": "number",
-        "name": "pincode",
-        "label": "Pin",
-        "error": "Invalid"
-    }, {
-        "type": "action",
-        "actionClass": "submit-button",
-        "label": "Submit",
-        "error": "Invalid"
-    }, {
-        "type": "action",
-        "actionClass": "back-button",
-        "label": "Back",
-        "error": "Invalid"
-    }, {
-        "type": "action",
-        "actionClass": "next-button",
-        "label": "Next",
-        "error": "Invalid"
-    }]
     instance.submitReg = function(user) {
         fetch('http://localhost:7080/user', {
             method: "POST",

@@ -1,64 +1,67 @@
-<div class="reg-img"></div>
-<div class="calendar-holder"></div>
-<div class="form-div">
-    <div class="form-fields">
-        {{#each this.fields}}
+<div class="form">
+    <div class="reg-img"></div>
+    <div class="calendar-holder"></div>
+    <div class="form-div">
+        <div class="form-fields">
+            {{#each this.fields}}
             {{#ttype type}}
              
         
         
-        <div class="field">
-            <input type="{{type}}" class="text-input" name="{{name}}" required tabindex="{{tabindex}}" placeholder="{{label}}">
-            <span class="highlight">{{error}}</span>
-            <span class="bar"></span>
-            <label class="label">{{label}}</label>
-        </div>
-        {{/ttype}}
+        
+            <div class="field">
+                <input type="{{type}}" class="text-input" name="{{name}}" required tabindex="{{tabindex}}" placeholder="{{label}}">
+                <span class="highlight">{{error}}</span>
+                <span class="bar"></span>
+                <label class="label">{{label}}</label>
+            </div>
+            {{/ttype}}
            
         {{#eq type 'range'}}
                 
          
         
-        <div class="range-holder">
-            <!-- <input type="{{type}}" class="range-input" name="{{name}}" min="{{min}}" max="{{max}}" required tabindex="{{tabindex}}">
+        
+            <div class="range-holder">
+                <!-- <input type="{{type}}" class="range-input" name="{{name}}" min="{{min}}" max="{{max}}" required tabindex="{{tabindex}}">
             <label class="label">{{label}}</label> -->
-            <div class="range">
-                <div class="range-track">
-                    <div class="range-thumb-outer">
-                        <span draggable="true" class="range-thumb-inner"></span>
+                <div class="range">
+                    <div class="range-track">
+                        <div class="range-thumb-outer">
+                            <span draggable="true" class="range-thumb-inner"></span>
+                        </div>
+                        <!-- <div class="track-fill"></div> -->
                     </div>
-                    <!-- <div class="track-fill"></div> -->
+                    <div class="track-fill"></div>
                 </div>
-                <div class="track-fill"></div>
             </div>
-        </div>
-        {{/eq}}
+            {{/eq}}
 
         {{#eq type 'date'}}
-        <div class="field">
-            <input type="text" class="text-input calendar-trigger" name="{{name}}" required tabindex="{{tabindex}}" onfocus="this.placeholder='{{label}}'" onfocusout="this.placeholder=''">
-            <span class="highlight">{{error}}</span>
-            <span class="bar"></span>
-            <label class="label">{{label}}</label>
-        </div>
-        {{/eq}}
+        
+            <div class="field">
+                <input type="text" class="text-input calendar-trigger" name="{{name}}" required tabindex="{{tabindex}}" placeholder="{{label}}">
+                <span class="highlight">{{error}}</span>
+                <span class="bar"></span>
+                <label class="label">{{label}}</label>
+            </div>
+            {{/eq}}
         {{/each}}
         
         
         
         
         
-        <div class="form-action-panel">
-            {{#each this.fields}}
+        
+            <div class="form-action-panel">
+                {{#each this.fields}}
                 {{#eq type 'action'}}
                     <span class="{{actionClass}} button" tabindex="{{tabindex}}">{{label}}</span>
-            {{/eq}}   
+                {{/eq}}   
             {{/each}}
-
         
         
-        
-        
+            </div>
         </div>
     </div>
 </div>
