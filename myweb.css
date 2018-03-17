@@ -445,6 +445,7 @@
         width: 100%;
         position: absolute;
         z-index: 4;
+        left: 5%;
     }
 
     .field {

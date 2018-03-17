@@ -117,6 +117,14 @@ input[type="date"] {
     animation: say-no 0.5s 2;
 }
 
+.err{
+    visibility:hidden;
+    background-color: red;
+    width:50%;
+    height:0.5px;
+    position:absolute;
+    top: 52%;
+}
 .red{
     color:red;
 }
@@ -128,17 +136,17 @@ input[type="date"] {
 
     25% {
         color: red;
-        left: 10px;
+        left: 70px;
     }
 
     50% {
         color: red;
-        left: -5px;
+        left: -10px;
     }
 
     75% {
         color: red;
-        left: 5px;
+        left: 70px;
     }
 
     100% {

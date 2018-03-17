@@ -22,13 +22,7 @@ module.exports = function() {
         inst.calendar = ec('calendar')[0];
         for (var i = 0; i < calButtons.length; i++) {
             var calButton = calButtons[i];
-            calButton.addEventListener('click', function(event) {
-                window.cal = showCalendar(ec('calendar-holder')[0], calButton);
-            });
-            calButton.addEventListener('touchstart', function(event) {
-                window.cal = showCalendar(ec('calendar-holder')[0], calButton);
-            });
-            calButton.addEventListener('mousedown', function(event) {
+            calButton.addEventListener('focus', function(event) {
                 window.cal = showCalendar(ec('calendar-holder')[0], calButton);
             });
         }

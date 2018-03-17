@@ -206,12 +206,14 @@ exports.init = function(user) {
         "type": "text",
         "name": "fullName",
         "label": "Full Name",
-        "error": "Not valid Name"
+        "error": "Not valid Name",
+        "pattern":"[A-Za-z\\s]*"
     }, {
         "type": "tel",
         "name": "mobileNumber",
         "label": "Mobile Number",
-        "error": "Mobile number is not valid"
+        "error": "Mobile number is not valid",
+        "pattern":"[0-9]{10}"
     }, {
         "type": "date",
         "name": "dateOfBirth",
@@ -221,17 +223,14 @@ exports.init = function(user) {
         "type": "email",
         "name": "emailId",
         "label": "E-Mail ID",
-        "error": "Not valid email"
-    }, {
-        "type": "password",
-        "name": "password-one",
-        "label": "Password",
-        "error": "Password Mismatch"
-    }, {
+        "error": "Not valid email",
+        "pattern":"[a-z]*(@)[a-z]*(\.)[a-z]*"
+    },{
         "type": "password",
         "name": "password",
-        "label": "Confirm Password",
-        "error": "Password Mismatch"
+        "label": "Password",
+        "error": "Not valid",
+        "pattern":".*"
     }, {
         "type": "action",
         "actionClass": "reset-button",
