@@ -71,10 +71,10 @@ exports.init = function(user) {
                                 event.target.parentElement.children[3].classList.add('input-invalid');
                                 event.target.parentElement.children[1].classList.add('input-invalid');
                                 event.target.parentElement.children[3].classList.add('red');
-                                event.target.parentElement.children[1].style.display="block";
+                                event.target.parentElement.children[1].style.display = "block";
                                 setTimeout(function() {
                                     event.target.parentElement.children[3].classList.remove('input-invalid');
-                                },500);
+                                }, 500);
                             }
                         } else {
                             event.target.parentElement.children[3].classList.remove('filled-label');
@@ -193,27 +193,21 @@ exports.init = function(user) {
         user.name.displayName = user.name.firstName + ' ' + user.name.lastName;
         user.contact.mobileNumber = [en('mobileNumber')[0].value];
         user.contact.emailIDs = [user.id];
-        let password = en('password-one')[0].value;
-        if (password === en('password')[0].value) {
-            user.password = password;
-            return user;
-        } else {
-            console.log('password did not match');
-            return undefined;
-        }
+        user.password = en('password')[0].value;
+        return user;
     }
     instance.page1Form = [{
         "type": "text",
         "name": "fullName",
         "label": "Full Name",
         "error": "Not valid Name",
-        "pattern":"[A-Za-z\\s]*"
+        "pattern": "[A-Za-z\\s]*"
     }, {
         "type": "tel",
         "name": "mobileNumber",
         "label": "Mobile Number",
         "error": "Mobile number is not valid",
-        "pattern":"[0-9]{10}"
+        "pattern": "[0-9]{10}"
     }, {
         "type": "date",
         "name": "dateOfBirth",
@@ -224,13 +218,13 @@ exports.init = function(user) {
         "name": "emailId",
         "label": "E-Mail ID",
         "error": "Not valid email",
-        "pattern":"[a-z]*(@)[a-z]*(\.)[a-z]*"
-    },{
+        "pattern": "[a-z]*(@)[a-z]*(\.)[a-z]*"
+    }, {
         "type": "password",
         "name": "password",
         "label": "Password",
         "error": "Not valid",
-        "pattern":".*"
+        "pattern": ".*"
     }, {
         "type": "action",
         "actionClass": "reset-button",
